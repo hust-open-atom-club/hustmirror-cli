@@ -7,7 +7,7 @@
 ## 使用方法
 
 ```
-curl -s https://mirrors.hust.edu.cn/get | sh
+curl -s https://hustmirror.cn/get | sh
 ```
 
 ## 参考
