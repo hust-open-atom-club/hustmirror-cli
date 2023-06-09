@@ -36,7 +36,7 @@ supported_distros=(
 #	"Deepin"
 #	"OpenEuler"
 #	"OpenKylin"
-#	"Ubuntu"
+	"Ubuntu"
 )
 
 # Display help function
@@ -83,6 +83,20 @@ case $NAME in
 		echo "# deb-src https://hustmirror.cn/debian/ ${codename} main contrib non-free non-free-firmware" >> ${config_file}
 		echo "deb https://hustmirror.cn/debian/ ${codename}-updates main contrib non-free non-free-firmware" >> ${config_file}
 		echo "# deb-src https://hustmirror.cn/debian/ ${codename}-updates main contrib non-free non-free-firmware" >> $config_file
+		# Never change security software repository due to security concern
+		echo "deb http://security.debian.org/debian-security ${codename}-security main contrib non-free non-free-firmware" >> ${config_file}
+		echo "# deb http://security.debian.org/debian-security ${codename}-security main contrib non-free non-free-firmware" >> $config_file
+		;;
+	"Ubuntu")
+		codename=${VERSION_CODENAME}
+		echo "# Genreated by hustmirror-cli" > ${config_file}
+		echo "deb https://hustmirror.cn/ubuntu/ ${codename} main universe restricted multiverse" >> ${config_file}
+		echo "# deb-src https://hustmirror.cn/ubuntu/ ${codename} main universe restricted multiverse" >> ${config_file}
+		echo "deb https://hustmirror.cn/ubuntu/ ${codename}-updates main universe restricted multiverse" >> ${config_file}
+		echo "# deb-src https://hustmirror.cn/ubuntu/ ${codename}-updates main universe restricted multiverse" >> $config_file
+		# Never change security software repository due to security concern
+		echo "deb http://security.ubuntu.com/ubuntu ${codename}-security main universe restricted multiverse" >> ${config_file}
+		echo "# deb-src http://security.ubuntu.com/ubuntu ${codename}-security main universe restricted multiverse" >> $config_file
 		;;
 	*)
 		echo "$NAME is unsupported"
