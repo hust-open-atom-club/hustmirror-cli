@@ -4,10 +4,10 @@ import sys, os, re
 output = sys.stdout;
 
 def replace_include(str):
-    exp = r'''@include\s+['"]?(.*)['"]?''';
+    exp = r'''@include\s+(.*)''';
     matches = re.match(exp, str)
     if matches:
-        with open(matches.group(1), 'r') as f:
+        with open(dirname + '/' + matches.group(1), 'r') as f:
             return f.read()
     else:
         return str
@@ -22,6 +22,7 @@ def replace_var(str):
     return str
 
 file = sys.argv[1]
+dirname = os.path.dirname(file)
 
 with open(file, 'r') as f:
     lines = f.readlines()
