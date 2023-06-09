@@ -23,21 +23,27 @@
 # httpmirror-cli - a CLI Bash script to generate a configuration file
 #                  for software repository on different distributions
 
+set -eux
+
 scriptVersion="v0.0.1"
 
+# TODO: revise the config filename according to distributions
+config_file="hustmirror"
+
 supported_distros=(
-	"Arch Linux"
+#	"Arch Linux"
 	"Debian"
-	"Deepin"
-	"OpenEuler"
-	"OpenKylin"
-	"Ubuntu"
+#	"Deepin"
+#	"OpenEuler"
+#	"OpenKylin"
+#	"Ubuntu"
 )
 
 # Display help function
 display_help() {
 	echo "httpmirror-cli - a CLI Bash script to generate a configuration file"
 	echo "                 for software repository on different distributions"
+	echo
 	echo "Usage: $0 [option...] " >&2
 	echo
 	echo "   -h, --help                 Display help message"
@@ -46,7 +52,6 @@ display_help() {
 
 while true; do
     if [ $# -eq 0 ];then
-	echo $#
 	break
     fi
     case "$1" in
@@ -63,3 +68,24 @@ while true; do
             ;;
     esac
 done
+
+# Refer to https://www.freedesktop.org/software/systemd/man/os-release.html
+# /etc/os-release does exist in most Linux distributions, and BSD variants
+test -e /etc/os-release && os_release='/etc/os-release' || os_release='/usr/lib/os-release'
+source "${os_release}"
+
+# Get distribution codename 
+case $NAME in
+	"Debian GNU/Linux")
+		codename=${VERSION_CODENAME}
+		echo "# Genreated by hustmirror-cli" > ${config_file}
+		echo "deb https://hustmirror.cn/debian/ ${codename} main contrib non-free non-free-firmware" >> ${config_file}
+		echo "# deb-src https://hustmirror.cn/debian/ ${codename} main contrib non-free non-free-firmware" >> ${config_file}
+		echo "deb https://hustmirror.cn/debian/ ${codename}-updates main contrib non-free non-free-firmware" >> ${config_file}
+		echo "# deb-src https://hustmirror.cn/debian/ ${codename}-updates main contrib non-free non-free-firmware" >> $config_file
+		;;
+	*)
+		echo "$NAME is unsupported"
+		echo "Supported Distributions are ${supported_distros[*]}"
+		;;
+esac
