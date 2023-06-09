@@ -13,9 +13,10 @@ OUT_MIRROR_FILES := $(patsubst $(MIRROR_DIR)/%,$(OUT_MIRROR_DIR)/%,$(MIRROR_FILE
 all: $(OUT_FILE)
 	@echo "Done, object script is $(OUT_FILE)."
 
-$(OUT_FILE): $(MIRROR_DIR)
+$(OUT_FILE): $(TEMPLATE_FILE) $(MIRROR_DIR)
 	@mkdir -p $(OUT_DIR)
-	@cp $(TEMPLATE_FILE) $(OUT_FILE)
+	@echo "Process $<"
+	@scripts/template-instantiate.py $< > $@
 
 $(MIRROR_DIR): $(OUT_MIRROR_FILES)
 	@:
@@ -29,6 +30,7 @@ clean:
 	@rm -rf $(OUT_DIR)
 	@echo "Cleaned."
 
+# used for debug Makefile
 dump:
 	$(foreach v, \
 		$(shell echo "$(filter-out .VARIABLES,$(.VARIABLES))" | tr ' ' '\n' | sort), \

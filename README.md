@@ -33,6 +33,10 @@ output script will be placed in `/output/hustmirror.sh`
     - src/checkfile.sh: check file.
 - scripts: store scripts used for packaging.
 
+### Template
+Template file supports following directives:
+- `@include file`: include other files.
+- `@var(shell code)`: get a string from build process.
 
 ### Mirror script contract
 All files in mirror should implement following functions.
