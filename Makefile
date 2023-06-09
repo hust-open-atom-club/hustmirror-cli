@@ -16,7 +16,8 @@ all: $(OUT_FILE)
 $(OUT_FILE): $(TEMPLATE_FILE) $(MIRROR_DIR)
 	@mkdir -p $(OUT_DIR)
 	@echo "Process $<"
-	@scripts/template-instantiate.py $< > $@
+	@scripts/template-instantiate.py $< > $@.tmp
+	@mv $@.tmp $@
 
 $(MIRROR_DIR): $(OUT_MIRROR_FILES)
 	@:
