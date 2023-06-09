@@ -25,6 +25,7 @@
 
 # disable this when deploying online
 #set -eux
+set -e
 
 scriptVersion="v0.0.1"
 
@@ -112,3 +113,5 @@ case $NAME in
 		echo "Supported Distributions are ${supported_distros[*]}"
 		;;
 esac
+
+# vim: set filetype=sh ts=4 sw=4 noexpandtab:
