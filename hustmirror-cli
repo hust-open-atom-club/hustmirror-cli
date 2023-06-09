@@ -23,7 +23,8 @@
 # httpmirror-cli - a CLI Bash script to generate a configuration file
 #                  for software repository on different distributions
 
-set -eux
+# disable this when deploying online
+#set -eux
 
 scriptVersion="v0.0.1"
 
@@ -87,6 +88,9 @@ case $NAME in
 		# Never change security software repository due to security concern
 		echo "deb http://security.debian.org/debian-security ${codename}-security main contrib non-free non-free-firmware" >> ${config_file}
 		echo "# deb http://security.debian.org/debian-security ${codename}-security main contrib non-free non-free-firmware" >> $config_file
+		echo "Please execute the following commands:"
+		echo "sudo mv /etc/apt/sources.list /etc/apt/sources.list.save"
+		echo "sudo mv ${config_file} /etc/apt/sources.list"
 		;;
 	"Ubuntu")
 		codename=${VERSION_CODENAME}
@@ -99,6 +103,9 @@ case $NAME in
 		# Never change security software repository due to security concern
 		echo "deb http://security.ubuntu.com/ubuntu ${codename}-security main universe restricted multiverse" >> ${config_file}
 		echo "# deb-src http://security.ubuntu.com/ubuntu ${codename}-security main universe restricted multiverse" >> $config_file
+		echo "Please execute the following commands:"
+		echo "sudo mv /etc/apt/sources.list /etc/apt/sources.list.save"
+		echo "sudo mv ${config_file} /etc/apt/sources.list"
 		;;
 	*)
 		echo "$NAME is unsupported"
