@@ -18,7 +18,9 @@ def replace_var(str):
     for match in matches:
         shell_code = match.group(1)
         output = os.popen(shell_code).read()
-        str = str.replace(match.group(1), output)
+        if output.endswith('\n'):
+            output = output[:-1]
+        str = str.replace(match.group(0), output)
     return str
 
 file = sys.argv[1]
