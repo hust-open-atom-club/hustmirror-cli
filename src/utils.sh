@@ -72,7 +72,7 @@ ESC=$(printf "\033")
 
 echo_red() {
 	if is_tty; then
-		echo "\033[0;31m${1}\033[0m"
+		printf "\033[0;31m${1}\033[0m\n"
 	else
 		echo "${1}"
 	fi
@@ -80,7 +80,7 @@ echo_red() {
 
 echo_green() {
 	if is_tty; then
-		echo "\033[0;32m${1}\033[0m"
+		printf "\033[0;32m${1}\033[0m\n"
 	else
 		echo "${1}"
 	fi
@@ -88,7 +88,7 @@ echo_green() {
 
 echo_yellow() {
 	if is_tty; then
-		echo "\033[0;33m${1}\033[0m"
+		printf "\033[0;33m${1}\033[0m\n"
 	else
 		echo "${1}"
 	fi
@@ -96,7 +96,7 @@ echo_yellow() {
 
 echo_blue() {
 	if is_tty; then
-		echo "\033[0;34m${1}\033[0m"
+		printf "\033[0;34m${1}\033[0m\n"
 	else
 		echo "${1}"
 	fi
