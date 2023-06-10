@@ -1,5 +1,5 @@
 #!/bin/env python3
-import sys, os, re
+import sys, os, re, glob
 
 output = sys.stdout;
 
@@ -23,6 +23,16 @@ def replace_var(str):
         str = str.replace(match.group(0), output)
     return str
 
+def replace_mirrors(str):
+    if str.strip() == '@mirrors':
+        files = glob.glob('output/mirrors/*')
+        str = '# BEGIN MIRRORS\n'
+        for file in files:
+            with open(file, 'r') as f:
+                str += f.read()
+        str += '# END MIRRORS\n'
+    return str
+
 file = sys.argv[1]
 dirname = os.path.dirname(file)
 
@@ -31,4 +41,5 @@ with open(file, 'r') as f:
     for line in lines:
         line = replace_include(line)
         line = replace_var(line)
+        line = replace_mirrors(line)
         output.write(line)

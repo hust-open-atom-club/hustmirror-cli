@@ -37,6 +37,7 @@ output script will be placed in `/output/hustmirror.sh`
 Template file supports following directives:
 - `@include file`: include other files.
 - `@var(shell code)`: get a string from build process.
+- `@mirrors`: include all processed mirror scripts.
 
 ### Mirror script contract
 All files in mirror should implement following functions.
