@@ -9,7 +9,7 @@ install() {
 	config_file="/etc/apt/sources.list"
 
 	test -e /etc/os-release && os_release='/etc/os-release' || os_release='/usr/lib/os-release'
-	source "${os_release}"
+	. "${os_release}"
 	codename=${VERSION_CODENAME}
 
 	sudo=''
