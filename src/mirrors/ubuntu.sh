@@ -7,22 +7,13 @@ check() {
 
 install() {
 	config_file="/etc/apt/sources.list"
-
-	test -e /etc/os-release && os_release='/etc/os-release' || os_release='/usr/lib/os-release'
-	. "${os_release}"
+	source_os_release
 	codename=${VERSION_CODENAME}
-
-	sudo=''
-
-	if [ ! is_root ] ; then
-		has_sudo || return 1
-		sudo='sudo'
-	fi
-
+	set_sudo
 
 	$sudo cp ${config_file} ${config_file}.bak
-	$sudo sh -c "
-		echo "\""# Genreated by hustmirror-cli"\"" > ${config_file}
+	$sudo sh -e -c "
+		echo "\""# ${gen_tag}"\"" > ${config_file}
 		echo "\""deb https://hustmirror.cn/ubuntu/ ${codename} main universe restricted multiverse"\"" >> ${config_file}
 		echo "\""# deb-src https://hustmirror.cn/ubuntu/ ${codename} main universe restricted multiverse"\"" >> ${config_file}
 		echo "\""deb https://hustmirror.cn/ubuntu/ ${codename}-updates main universe restricted multiverse"\"" >> ${config_file}
