@@ -70,7 +70,7 @@ is_tty() {
 
 c_echo() {
 	if has_command printf; then
-		printf "%s\n" "$*"
+		printf "$*\n"
 	else
 		echo "$*"
 	fi
