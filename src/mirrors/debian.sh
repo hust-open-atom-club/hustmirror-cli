@@ -16,13 +16,13 @@ install() {
 		return 1
 	}
 
-	secure_url="https://security.debian.org/debian-security"
+	secure_url="${http}://${domain}/debian-security/"
 	confirm_y "Use official secure source?" && \
-		secure_url="${http}://${domain}/debian-security/"
+		secure_url="https://security.debian.org/debian-security"
 
-	src_prefix=""
+	src_prefix="# "
 	confirm "Use source code?" && \
-		src_prefix="# "
+		src_prefix=""
 
 	$sudo sh -e -c "cat << EOF > ${config_file}
 # ${gen_tag}
@@ -42,6 +42,14 @@ EOF" || {
 		print_error "Failed to add mirror to ${config_file}"
 		return 1
 	}
+
+	confirm_y "Do you want to apt update?" && {
+		$sudo apt update || {
+			print_error "apt update failed"
+			return 1
+		}
+	}
+
 }
 
 uninstall() {
