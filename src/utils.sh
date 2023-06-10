@@ -135,6 +135,9 @@ print_question() {
 get_input() {
 	print_question "${1}"
 	read -r -p "[>] " input
+	if [ -z "${input}" ]; then
+		input="${2}"
+	fi
 }
 
 confirm() {
