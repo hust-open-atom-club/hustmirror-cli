@@ -12,7 +12,7 @@ install() {
 	set_sudo
 
 	$sudo cp ${config_file} ${config_file}.bak || {
-		echo "Backup ${config_file} failed"
+		print_error "Backup ${config_file} failed"
 		return 1
 	}
 
@@ -40,8 +40,15 @@ ${src_prefix}deb-src ${secure_url} ${codename}-security main restricted universe
 ${propoesd_prefix}deb ${http}://${domain}/ubuntu/ ${codename}-proposed main restricted universe multiverse
 ${propoesd_prefix}deb-src ${http}://${domain}/ubuntu/ ${codename}-proposed main restricted universe multiverse
 EOF" || {
-		echo "Write ${config_file} failed"
+		print_error "Write ${config_file} failed"
 		return 1
+	}
+
+	confirm "Do you want to apt update?" && {
+		$sudo apt update || {
+			print_error "apt update failed"
+			return 1
+		}
 	}
 }
 
