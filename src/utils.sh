@@ -5,11 +5,11 @@ print_logo() {
 	echo '|  _  | |_| |___) || | | |  | || ||  _ <|  _ <| |_| |  _ < '
 	echo '|_| |_|\___/|____/ |_| |_|  |_|___|_| \_\_| \_\\___/|_| \_\'
 	echo
+	echo "hustmirror-cli ${script_version} build ${build_time}"
 }
 
 display_help() {
 	print_logo
-	echo "hustmirror-cli ${script_version} build ${build_time}"
 	echo "A CLI Bash script to generate a configuration file"
 	echo "for software repository on different distributions"
 	echo
@@ -137,6 +137,10 @@ print_warning() {
 }
 
 print_success() {
+	echo_green "[+] ${1}"
+}
+
+print_info() {
 	echo_green "[+] ${1}"
 }
 
