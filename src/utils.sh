@@ -25,32 +25,6 @@ source_os_release() {
 	. "${os_release}"
 }
 
-confirm() {
-	# call with a prompt string or use a default
-	read -r -p "${1:-Are you sure? [y/N]} " response
-	case "${response}" in
-		[yY][eE][sS]|[yY])
-			true
-			;;
-		*)
-			false
-			;;
-	esac
-}
-
-confirm_y() {
-	# call with a prompt string or use a default
-	read -r -p "${1:-Are you sure? [Y/n]} " response
-	case "${response}" in
-		[nN][oO]|[nN])
-			false
-			;;
-		*)
-			true
-			;;
-	esac
-}
-
 is_root() {
 	if [ "$EUID" -ne 0 ]; then
 		return 0
@@ -155,6 +129,34 @@ print_question() {
 get_input() {
 	print_question "${1}"
 	read -r -p "[>] " input
+}
+
+confirm() {
+	# call with a prompt string or use a default
+	print_question "${1:-Are you sure?} [y/N]"
+	get_input
+	case "${input}" in
+		[yY][eE][sS]|[yY])
+			true
+			;;
+		*)
+			false
+			;;
+	esac
+}
+
+confirm_y() {
+	# call with a prompt string or use a default
+	print_question "${1:-Are you sure?} [Y/n]"
+	get_input
+	case "${input}" in
+		[nN][oO]|[nN])
+			false
+			;;
+		*)
+			true
+			;;
+	esac
 }
 
 # vim: set filetype=sh ts=4 sw=4 noexpandtab:
