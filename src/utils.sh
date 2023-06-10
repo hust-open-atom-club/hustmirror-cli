@@ -125,11 +125,11 @@ print_info() {
 }
 
 print_status() {
-	echo_blue "[*] ${1}"
+	echo_yellow "[*] ${1}"
 }
 
 print_question() {
-	echo_blue "[?] ${1}"
+	echo_yellow "[?] ${1}"
 }
 
 get_input() {
