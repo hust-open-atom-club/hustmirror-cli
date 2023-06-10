@@ -26,10 +26,10 @@ source_os_release() {
 }
 
 is_root() {
-	if [ "$EUID" -ne 0 ]; then
+	if [ $(id -u) -eq 0 ]; then
 		return 0
 	fi
-		return 1
+	return 1
 }
 
 has_command() {
@@ -68,37 +68,43 @@ is_tty() {
 	return $result
 }
 
-ESC=$(printf "\033")
+c_echo() {
+	if has_command printf; then
+		printf "$*\n"
+	else
+		echo "$*"
+	fi
+}
 
 echo_red() {
 	if is_tty; then
-		echo "\033[0;31m${1}\033[0m"
+		c_echo "\033[0;31m${1}\033[0m"
 	else
-		echo "${1}"
+		c_echo "${1}"
 	fi
 }
 
 echo_green() {
 	if is_tty; then
-		echo "\033[0;32m${1}\033[0m"
+		c_echo "\033[0;32m${1}\033[0m"
 	else
-		echo "${1}"
+		c_echo "${1}"
 	fi
 }
 
 echo_yellow() {
 	if is_tty; then
-		echo "\033[0;33m${1}\033[0m"
+		c_echo "\033[0;33m${1}\033[0m"
 	else
-		echo "${1}"
+		c_echo "${1}"
 	fi
 }
 
 echo_blue() {
 	if is_tty; then
-		echo "\033[0;34m${1}\033[0m"
+		c_echo "\033[0;34m${1}\033[0m"
 	else
-		echo "${1}"
+		c_echo "${1}"
 	fi
 }
 
@@ -123,7 +129,7 @@ print_status() {
 }
 
 print_question() {
-	echo_red "[?] ${1}"
+	echo_blue "[?] ${1}"
 }
 
 get_input() {
@@ -133,8 +139,7 @@ get_input() {
 
 confirm() {
 	# call with a prompt string or use a default
-	print_question "${1:-Are you sure?} [y/N]"
-	get_input
+	get_input "${1:-Are you sure?} [y/N]"
 	case "${input}" in
 		[yY][eE][sS]|[yY])
 			true
@@ -147,8 +152,7 @@ confirm() {
 
 confirm_y() {
 	# call with a prompt string or use a default
-	print_question "${1:-Are you sure?} [Y/n]"
-	get_input
+	get_input "${1:-Are you sure?} [Y/n]"
 	case "${input}" in
 		[nN][oO]|[nN])
 			false
@@ -157,6 +161,23 @@ confirm_y() {
 			true
 			;;
 	esac
+}
+
+print_supported() {
+	print_info "Supported softwares:"
+	echo $supported_softwares | xargs echo "   " | fold -s -w 80
+}
+
+set_sudo(){
+	sudo=''
+	if ! is_root; then
+		print_warning "You are not root, trying to use sudo..."
+		has_sudo || {
+			print_error "No sudo command found, please install sudo first."
+			return 1
+		}
+		sudo='sudo'
+	fi
 }
 
 # vim: set filetype=sh ts=4 sw=4 noexpandtab:
