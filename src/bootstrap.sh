@@ -47,7 +47,7 @@ done
 if [ -z "$ready_to_install" ] && [ -z "$unsure_to_install" ]; then
 	print_warning "No software is ready to install."
 	print_supported
-	exit 0
+	confirm "Do you want to continue to use other function?" || exit 0
 fi
 
 if [ -n "$ready_to_install" ]; then
