@@ -55,5 +55,10 @@ if [ -n "$unsure_to_install" ]; then
 	echo "   $unsure_to_install"
 fi
 
+get_input "What do you want to install? [all] 
+    all for all ready to install software(s)
+    all! for all software(s), including unsure ones.
+    <software> for specific softwares, use space to separate multiple softwares."
+
 
 # vim: set filetype=sh ts=4 sw=4 noexpandtab:

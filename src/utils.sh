@@ -153,8 +153,8 @@ print_question() {
 }
 
 get_input() {
-	print_question ${1}
-	read -r input
+	print_question "${1}"
+	read -r -p "[>] " input
 }
 
 # vim: set filetype=sh ts=4 sw=4 noexpandtab:
