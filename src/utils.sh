@@ -59,27 +59,39 @@ is_root() {
 }
 
 has_command() {
-	return command -v "${1}" >/dev/null 2>&1
+	result=0
+	command -v "${1}" >/dev/null 2>&1 || result=$?
+	return $result
 }
 
 has_sudo() {
-	return has_command sudo
+	result=0
+	has_command sudo || result=$?
+	return $result
 }
 
 has_curl() {
-	return has_command curl
+	result=0
+	has_command curl || result=$?
+	return $result
 }
 
 has_git() {
-	return has_command git
+	result=0
+	has_command git || result=$?
+	return $result
 }
 
 has_sed() {
-	return has_command sed
+	result=0
+	has_command sed || result=$?
+	return $result
 }
 
 is_tty() {
-	return [ -t 1 ]
+	result=0
+	[ -t 1 ] || result=$?
+	return $result
 }
 
 ESC=$(printf "\033")
