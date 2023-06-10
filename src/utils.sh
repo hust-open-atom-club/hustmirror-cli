@@ -26,7 +26,7 @@ source_os_release() {
 }
 
 is_root() {
-	if [ $(id -u) -eq 0 ]; then
+	if [ "$(id -u)" -eq 0 ]; then
 		return 0
 	fi
 	return 1
@@ -70,7 +70,7 @@ is_tty() {
 
 c_echo() {
 	if has_command printf; then
-		printf "$*\n"
+		printf "%s\n" "$*"
 	else
 		echo "$*"
 	fi
@@ -165,7 +165,7 @@ confirm_y() {
 
 print_supported() {
 	print_info "Supported softwares:"
-	echo $supported_softwares | xargs echo "   " | fold -s -w 80
+	echo "$supported_softwares" | xargs echo "   " | fold -s -w 80
 }
 
 set_sudo(){

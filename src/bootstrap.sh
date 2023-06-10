@@ -44,7 +44,7 @@ for software in $supported_softwares; do
 	fi
 done
 
-if [ -z "$ready_to_install" -a -z "$unsure_to_install" ]; then
+if [ -z "$ready_to_install" ] && [ -z "$unsure_to_install" ]; then
 	print_warning "No software is ready to install."
 	print_supported
 	exit 0
@@ -113,7 +113,7 @@ install() {
 		exit 1
 	}
 	print_status "Downloading latest hust-mirror..."
-	curl -sL ${http}://${domain}/get.sh > "$install_target" || {
+	curl -sL "${http}://${domain}/get.sh" > "$install_target" || {
 		print_error "Failed to download hust-mirror."
 		exit 1
 	}
