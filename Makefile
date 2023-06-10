@@ -13,19 +13,17 @@ OUT_MIRROR_FILES := $(patsubst $(MIRROR_DIR)/%,$(OUT_MIRROR_DIR)/%,$(MIRROR_FILE
 all: $(OUT_FILE)
 	@echo "Done, object script is $(OUT_FILE)."
 
-$(OUT_FILE): $(TEMPLATE_FILE) $(MIRROR_DIR)
+$(OUT_FILE): $(TEMPLATE_FILE) $(OUT_MIRROR_FILES)
 	@mkdir -p $(OUT_DIR)
 	@echo "Process $<"
 	@scripts/template-instantiate.py $< > $@.tmp
 	@mv $@.tmp $@
 
-$(MIRROR_DIR): $(OUT_MIRROR_FILES)
-	@:
-
 $(OUT_MIRROR_FILES): $(OUT_MIRROR_DIR)/%: $(MIRROR_DIR)/%
 	@echo "Process $<"
 	@mkdir -p $(OUT_MIRROR_DIR)
-	@cp $< $@
+	@scripts/gen-mirror.py $< > $@.tmp
+	@mv $@.tmp $@
 
 clean:
 	@rm -rf $(OUT_DIR)
