@@ -141,11 +141,20 @@ print_success() {
 }
 
 print_info() {
-	echo_green "[+] ${1}"
+	echo_green "[!] ${1}"
 }
 
 print_status() {
 	echo_blue "[*] ${1}"
+}
+
+print_question() {
+	echo_red "[?] ${1}"
+}
+
+get_input() {
+	print_question ${1}
+	read -r input
 }
 
 # vim: set filetype=sh ts=4 sw=4 noexpandtab:
