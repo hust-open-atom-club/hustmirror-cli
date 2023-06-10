@@ -16,17 +16,17 @@ install() {
 		return 1
 	}
 
-	secure_url="http://security.ubuntu.com/ubuntu/"
+	secure_url="${http}://${domain}/ubuntu/"
 	confirm_y "Use official secure source?" && \
-		secure_url="${http}://${domain}/ubuntu/"
+		secure_url="http://security.ubuntu.com/ubuntu/"
 
-	propoesd_prefix=""
+	propoesd_prefix="# "
 	confirm "Use proposed source?" && \
-		propoesd_prefix="# "
+		propoesd_prefix=""
 
-	src_prefix=""
+	src_prefix="# "
 	confirm "Use source code?" && \
-		src_prefix="# "
+		src_prefix=""
 
 	$sudo sh -e -c "cat <<EOF > ${config_file}
 # ${gen_tag}
@@ -44,7 +44,7 @@ EOF" || {
 		return 1
 	}
 
-	confirm "Do you want to apt update?" && {
+	confirm_y "Do you want to apt update?" && {
 		$sudo apt update || {
 			print_error "apt update failed"
 			return 1
