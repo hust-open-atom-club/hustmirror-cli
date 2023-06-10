@@ -22,7 +22,7 @@ display_help() {
 source_os_release() {
 	# /etc/os-release does exist in most Linux distributions, and BSD variants
 	test -e /etc/os-release && os_release='/etc/os-release' || os_release='/usr/lib/os-release'
-	source "${os_release}"
+	. "${os_release}"
 }
 
 confirm() {
