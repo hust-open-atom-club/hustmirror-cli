@@ -28,7 +28,7 @@
 set -e
 
 script_version="v0.0.1"
-build_time="@var(date -u +'%Y-%m-%d %H:%M.%S UTC')"
+build_time="@var(date -u +'%Y-%m-%d %H:%M:%S UTC')"
 
 @include utils.sh
 
