@@ -27,15 +27,14 @@
 #set -eux
 set -e
 
-scriptVersion="v0.0.1"
+script_version="v0.0.1"
 build_time="@var(date -u +'%Y-%m-%d %H:%M.%S UTC')"
 
 @include utils.sh
 
-# TODO: revise the config filename according to distributions
-config_file="hustmirror"
-
-supported_distros="@var(basename `ls src/mirrors/*` | cut -d . -f1)"
+# Not only to replace distributions but also softwares like pypi,
+# npm registry, dockerhub, etc.
+supported_softwares="@var(ls -1 src/mirrors/* | sed -E 's/^.+\/(.+)\.[^.]*$/\1/')"
 
 @mirrors
 
