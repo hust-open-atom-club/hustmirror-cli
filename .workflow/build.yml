@@ -1,0 +1,43 @@
+version: '1.0'
+name: build
+displayName: build
+triggers:
+  trigger: auto
+  push:
+    branches:
+      precise:
+        - master
+stages:
+  - name: stage-build
+    displayName: build
+    strategy: fast
+    trigger: auto
+    executor:
+      - mudongliang
+      - EarthCompass
+      - am009
+      - chengziqiu
+    steps:
+      - step: build@gcc
+        name: build_make
+        displayName: build
+        gccVersion: '9.4'
+        commands:
+          - make
+        artifacts:
+          - name: BUILD_ARTIFACT
+            path:
+              - ./output/hust-mirror.sh
+        caches: []
+        notify: []
+        strategy:
+          retry: '0'
+      - step: publish@general_artifacts
+        name: publish_general_artifacts
+        displayName: upload
+        dependArtifact: BUILD_ARTIFACT
+        artifactName: output
+        notify: []
+        strategy:
+          retry: '0'
+        dependsOn: build_make
