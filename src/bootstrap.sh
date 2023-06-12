@@ -31,6 +31,22 @@ if ! is_tty; then
 	exit 1
 fi
 
+print_status "Reading configuration file..."
+source_config || {
+	print_warning "No configuration file found."
+	if confirm_y "Do you want to autogenerate a default configuration file?"; then
+		save_config
+	else
+		select_from_menu "Choose your prefer domain" $domains
+		domain=$result
+		http=https
+		confirm_y "Do you want to use https rather than http?" || \
+			http=http
+		confirm_y "Do you want to save the configuration?" && \
+			save_config
+	fi
+}
+
 print_status "Checking the environment and mirrors to install..."
 for software in $supported_softwares; do
 	# check if the software is ready to deploy

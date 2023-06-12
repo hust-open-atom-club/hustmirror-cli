@@ -25,6 +25,30 @@ source_os_release() {
 	. "${os_release}"
 }
 
+source_config() {
+	hustmirror_config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/hustmirror"
+	hustmirror_config="${hustmirror_config_dir}/hustmirror.conf"
+	if [ -f "${hustmirror_config}" ]; then
+		. "${hustmirror_config}" || {
+			print_error "Failed to read configuration file: ${hustmirror_config}"
+			return 1
+		}
+	else
+		return 1
+	fi
+}
+
+save_config() {
+	hustmirror_config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/hustmirror"
+	hustmirror_config="${hustmirror_config_dir}/hustmirror.conf"
+	mkdir -p "${hustmirror_config_dir}"
+	cat <<EOF > "${hustmirror_config}"
+# ${gen_tag}
+domain="${domain}"
+http="${http}"
+EOF
+}
+
 is_root() {
 	if [ "$(id -u)" -eq 0 ]; then
 		return 0
@@ -133,7 +157,7 @@ print_question() {
 }
 
 get_input() {
-	print_question "${1}"
+	[ -n "${1}" ] && print_question "${1}"
 	read -r -p "[>] " input
 	if [ -z "${input}" ]; then
 		input="${2}"
@@ -181,6 +205,34 @@ set_sudo(){
 		}
 		sudo='sudo'
 	fi
+}
+
+
+# ask user to select a item from a menu
+# $1 tip message
+# $2 menu items
+select_from_menu() {
+	message=$1
+	shift
+	menu_items=$@
+	menu_number=0
+	# implement array in POSIX shell
+	set -- $menu_items
+	print_question "$message"
+	for item in $menu_items
+	do
+		menu_number=$(expr $menu_number + 1)
+		echo "    $menu_number:" "$item"
+	done
+	while true; do
+		get_input "Input an item number from the list above."
+		result=$(eval "echo \$$input")
+		if [ -z "$result" ]; then
+			print_error "Bad input!"
+		else
+			break
+		fi
+	done
 }
 
 # vim: set filetype=sh ts=4 sw=4 noexpandtab:
