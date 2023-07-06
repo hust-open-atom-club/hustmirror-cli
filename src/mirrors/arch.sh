@@ -17,11 +17,13 @@ install() {
 	}
 
 	old_config=$(cat ${config_file})
-	$sudo sh -e -c "cat << EOF > ${config_file}
+	{
+		cat << EOF | $sudo tee ${config_file} > /dev/null
 # ${gen_tag}
-Server = ${http}://${domain}/archlinux/\\\$repo/os/\\\$arch
+Server = ${http}://${domain}/archlinux/\$repo/os/\$arch
 ${old_config}
-EOF" || {
+EOF
+	} || {
 		print_error "Failed to add mirror to ${config_file}"
 		return 1
 	}
