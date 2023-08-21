@@ -50,46 +50,31 @@ EOF
 }
 
 is_root() {
-	if [ "$(id -u)" -eq 0 ]; then
-		return 0
-	fi
-	return 1
+	[ "$(id -u)" -eq 0 ] 
 }
 
 has_command() {
-	result=0
-	command -v "${1}" >/dev/null 2>&1 || result=$?
-	return $result
+	command -v "${1}" >/dev/null 2>&1
 }
 
 has_sudo() {
-	result=0
-	has_command sudo || result=$?
-	return $result
+	has_command sudo
 }
 
 has_curl() {
-	result=0
-	has_command curl || result=$?
-	return $result
+	has_command curl
 }
 
 has_git() {
-	result=0
-	has_command git || result=$?
-	return $result
+	has_command git
 }
 
 has_sed() {
-	result=0
-	has_command sed || result=$?
-	return $result
+	has_command sed
 }
 
 is_tty() {
-	result=0
-	[ -t 1 ] || result=$?
-	return $result
+	[ -t 0 ]
 }
 
 c_echo() {
