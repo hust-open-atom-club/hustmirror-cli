@@ -17,5 +17,5 @@ do
   fi
 
   echo "RUNNING $test_file..."
-  $test_file
+  . $test_file
 done
