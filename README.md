@@ -15,12 +15,12 @@ into a single executable bash.
 make
 ```
 
+output script will be placed in `/output/hustmirror.sh`
+
 ## Test
 ```shell
 make test
 ```
-
-output script will be placed in `/output/hustmirror.sh`
 
 ## Contract
 
