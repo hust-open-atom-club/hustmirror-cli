@@ -1,33 +1,13 @@
 #!/bin/bash
 set -e
 
-# close stdin
-exec 0<&-
+config_file="/etc/apt/sources.list"
+new_config_file="$config_file"
+if ! [[ -f "$config_file" ]]; then
+  config_file="/etc/apt/sources.list.d/debian.sources"
+fi
 
-echo "---------"
-echo "apt dir"
-echo "---------"
-ls /etc/apt
+update_command="apt-get update"
+recover_item="debian"
 
-echo "---------"
-echo "Origin file"
-echo "---------"
-cat /etc/apt/sources.list || true
-cat /etc/apt/sources.list.d/debian.list || true
-
-
-echo "---------"
-echo "Running deploy"
-echo "---------"
-HM_HTTP=http /hustmirror/hust-mirror.sh autodeploy
-
-echo "---------"
-echo "New file"
-echo "---------"
-cat /etc/apt/sources.list || true
-cat /etc/apt/sources.list.d/debian.list || true
-
-echo "---------"
-echo "apt-get update"
-echo "---------"
-apt-get update && touch /hmtest_log/pass
+source "$(realpath ${BASH_SOURCE%/*})/run_test.sh"

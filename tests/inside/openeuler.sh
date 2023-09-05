@@ -1,26 +1,8 @@
 #!/bin/bash
 set -e
 
-# close stdin
-exec 0<&-
+config_file="/etc/yum.repos.d/openEuler.repo"
+update_command="yum makecache"
+recover_item="openeuler"
 
-echo "---------"
-echo "Origin file"
-echo "---------"
-cat /etc/yum.repos.d/openEuler.repo || true
-
-
-echo "---------"
-echo "Running deploy"
-echo "---------"
-HM_HTTP=http /hustmirror/hust-mirror.sh autodeploy
-
-echo "---------"
-echo "New file"
-echo "---------"
-cat /etc/yum.repos.d/openEuler.repo || true
-
-echo "---------"
-echo "yum update"
-echo "---------"
-yum makecache && touch /hmtest_log/pass
+source "$(realpath ${BASH_SOURCE%/*})/run_test.sh"

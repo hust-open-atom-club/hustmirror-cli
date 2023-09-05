@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -e
+set -o pipefail
  
 dir=${BASH_SOURCE%/*}
 cd $dir/outside

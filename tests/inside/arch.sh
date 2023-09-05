@@ -1,31 +1,8 @@
 #!/bin/bash
 set -e
 
-# close stdin
-exec 0<&-
+config_file="/etc/pacman.d/mirrorlist"
+update_command="pacman -Syy --noconfirm"
+recover_item="arch"
 
-echo "---------"
-echo "pacman dir"
-echo "---------"
-ls /etc/pacman.d/
-
-echo "---------"
-echo "Origin file"
-echo "---------"
-cat /etc/pacman.d/mirrorlist || true
-
-
-echo "---------"
-echo "Running deploy"
-echo "---------"
-HM_HTTP=http /hustmirror/hust-mirror.sh autodeploy
-
-echo "---------"
-echo "New file"
-echo "---------"
-cat /etc/pacman.d/mirrorlist || true
-
-echo "---------"
-echo "pacman update"
-echo "---------"
-pacman -Syy && touch /hmtest_log/pass
+source "$(realpath ${BASH_SOURCE%/*})/run_test.sh"
