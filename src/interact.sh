@@ -15,7 +15,7 @@ interact_recover() {
 interact_deploy() {
 	for item in $@
 	do
-		deploy $item
+		deploy $item || confirm "Do you want to continue?" || exit 1
 	done
 }
 

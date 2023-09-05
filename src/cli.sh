@@ -4,7 +4,7 @@ cli_deploy() {
 	fi
 	for item in $@
 	do
-		deploy $item
+		deploy $item || print_error "Failed to deploy $item. Ignoring..."
 	done
 }
 
@@ -14,7 +14,7 @@ cli_recover() {
 	fi
 	for item in $@
 	do
-		recover $item
+		recover $item || print_error "Failed to recover $item. Ignoring..."
 	done
 }
 
