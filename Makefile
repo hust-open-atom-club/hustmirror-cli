@@ -36,6 +36,10 @@ clean:
 	@rm -rf $(OUT_DIR)
 	@echo "Cleaned."
 
+clean-test-log:
+	@rm -rf tests/log
+	@echo "Cleaned."
+
 # used for debug Makefile
 dump:
 	$(foreach v, \
