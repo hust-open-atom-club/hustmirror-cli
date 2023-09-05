@@ -11,10 +11,14 @@ install() {
 	source_os_release
 	set_sudo
 
-	$sudo cp ${config_file} ${config_file}.bak || {
-		print_error "Failed to backup ${config_file}"
-		return 1
-	}
+	if [ -f $config_file ]; then
+		$sudo cp ${config_file} ${config_file}.bak || {
+			print_error "Failed to backup ${config_file}"
+			return 1
+		}
+	else
+		print_warning "No ${config_file} found, creating new one"
+	fi
 
 	secure_url="${http}://${domain}/debian-security/"
 	confirm_y "Use official secure source?" && \
@@ -24,19 +28,29 @@ install() {
 	confirm "Use source code?" && \
 		src_prefix=""
 
+
+	security_appendix='-security'
+	[ "$codename" = "buster" ] && security_appendix='/updates'
+
+	NFW=''
+	if [ "$codename" == 'bookworm' -o "$codename" == 'sid' -o "$codename" == 'testing' ]; then
+	  NFW=' non-free-firmware'	
+	fi
+
+
 	$sudo sh -e -c "cat << EOF > ${config_file}
 # ${gen_tag}
-deb ${http}://${domain}/debian ${codename} main contrib non-free
-${src_prefix}deb-src ${http}://${domain}/debian ${codename} main contrib non-free
+deb ${http}://${domain}/debian ${codename} main contrib non-free${NFW}
+${src_prefix}deb-src ${http}://${domain}/debian ${codename} main contrib non-free${NFW}
 
-deb ${http}://${domain}/debian ${codename}-updates main contrib non-free
-${src_prefix}deb-src ${http}://${domain}/debian ${codename}-updates main contrib non-free
+deb ${http}://${domain}/debian ${codename}-updates main contrib non-free${NFW}
+${src_prefix}deb-src ${http}://${domain}/debian ${codename}-updates main contrib non-free${NFW}
 
-deb ${http}://${domain}/debian ${codename}-backports main contrib non-free
-${src_prefix}deb-src ${http}://${domain}/debian ${codename}-backports main contrib non-free
+deb ${http}://${domain}/debian ${codename}-backports main contrib non-free${NFW}
+${src_prefix}deb-src ${http}://${domain}/debian ${codename}-backports main contrib non-free${NFW}
 
-deb ${secure_url} ${codename}-security main contrib non-free
-${src_prefix}deb-src ${http}://security.debian.org/debian-security ${codename}-security main contrib non-free
+deb ${secure_url} ${codename}${security_appendix} main contrib non-free${NFW}
+${src_prefix}deb-src ${http}://security.debian.org/debian-security ${codename}${security_appendix} main contrib non-free${NFW}
 
 EOF" || {
 		print_error "Failed to add mirror to ${config_file}"
