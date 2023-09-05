@@ -12,8 +12,8 @@ ls /etc/apt
 echo "---------"
 echo "Origin file"
 echo "---------"
-
 cat /etc/apt/sources.list || true
+cat /etc/apt/sources.list.d/debian.list || true
 
 
 echo "---------"
@@ -24,7 +24,8 @@ HM_HTTP=http /hustmirror/hust-mirror.sh autodeploy
 echo "---------"
 echo "New file"
 echo "---------"
-cat /etc/apt/sources.list
+cat /etc/apt/sources.list || true
+cat /etc/apt/sources.list.d/debian.list || true
 
 echo "---------"
 echo "apt-get update"

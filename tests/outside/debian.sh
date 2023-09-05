@@ -15,14 +15,27 @@ for image in $images
 do
   printf "TESTING $image...\t"
   LDIR=$ROOT_DIR/tests/log/${image/:/_}
-  rm -rf $LDIR/*
+  rm -rf $LDIR
   mkdir -p $LDIR
-  docker run -it --rm \
-    -v $ROOT_DIR/output:/hustmirror \
-    -v $ROOT_DIR/tests/inside:/hmtest \
-    -v $LDIR:/hmtest_log \
-    $image bash -c "/hmtest/debian.sh >/hmtest_log/output.log 2>&1" \
-    > $LDIR/docker_output.log 2> $LDIR/docker_output.err || true
+
+
+  if echo $image | grep "sid" >/dev/null; then
+    docker run -it --rm \
+      -v $ROOT_DIR/output:/hustmirror \
+      -v $ROOT_DIR/tests/inside:/hmtest \
+      -v $LDIR:/hmtest_log \
+      -e "HM_DEBIAN_SID=true" \
+      $image bash -c "/hmtest/debian.sh >/hmtest_log/output.log 2>&1" \
+      > $LDIR/docker_output.log 2> $LDIR/docker_output.err || true
+  else
+    docker run -it --rm \
+      -v $ROOT_DIR/output:/hustmirror \
+      -v $ROOT_DIR/tests/inside:/hmtest \
+      -v $LDIR:/hmtest_log \
+      $image bash -c "/hmtest/debian.sh >/hmtest_log/output.log 2>&1" \
+      > $LDIR/docker_output.log 2> $LDIR/docker_output.err || true
+  fi
+
 
   if [ -f $LDIR/pass ]; then
     printf "PASS \n"

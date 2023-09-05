@@ -126,7 +126,13 @@ print_question() {
 }
 
 get_input() {
-	if ! is_tty; then return 1; fi
+	if ! is_tty; then
+		if [ -n "${2}" ]; then
+			input="${2}"
+			return 0
+		fi
+		return 1
+	fi
 	[ -n "${1}" ] && print_question "${1}"
 	read -r -p "[>] " input
 	if [ -z "${input}" ]; then

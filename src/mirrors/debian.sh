@@ -7,8 +7,23 @@ check() {
 
 install() {
 	config_file="/etc/apt/sources.list"
-	codename=${VERSION_CODENAME}
+
+	if ! [ -f $config_file ]; then # rule for docker
+		config_file="/etc/apt/sources.list.d/debian.list"
+	fi
+
 	source_os_release
+	codename=${VERSION_CODENAME}
+	echo "$PRETTY_NAME" | grep "sid" > /dev/null && {
+		if [ "$HM_DEBIAN_SID" = "true" ]; then
+			codename="sid"
+		else
+			print_warning "hustmirror cannot distinguish sid or testing"
+			get_input "Please input codename (sid/testing): " "testing"
+			codename="$input"
+		fi
+	}
+
 	set_sudo
 
 	if [ -f $config_file ]; then
@@ -33,8 +48,12 @@ install() {
 	[ "$codename" = "buster" ] && security_appendix='/updates'
 
 	NFW=''
-	if [ "$codename" == 'bookworm' -o "$codename" == 'sid' -o "$codename" == 'testing' ]; then
+	if [ "$codename" = "bookworm" ] || [ "$codename" = "sid" ] || [ "$codename" = "testing" ]; then
 	  NFW=' non-free-firmware'	
+	fi
+
+	if [ "$codename" = "sid" ]; then
+		sid_prefix="# "
 	fi
 
 
@@ -43,14 +62,14 @@ install() {
 deb ${http}://${domain}/debian ${codename} main contrib non-free${NFW}
 ${src_prefix}deb-src ${http}://${domain}/debian ${codename} main contrib non-free${NFW}
 
-deb ${http}://${domain}/debian ${codename}-updates main contrib non-free${NFW}
-${src_prefix}deb-src ${http}://${domain}/debian ${codename}-updates main contrib non-free${NFW}
+${sid_prefix}deb ${http}://${domain}/debian ${codename}-updates main contrib non-free${NFW}
+${sid_prefix}${src_prefix}deb-src ${http}://${domain}/debian ${codename}-updates main contrib non-free${NFW}
 
-deb ${http}://${domain}/debian ${codename}-backports main contrib non-free${NFW}
-${src_prefix}deb-src ${http}://${domain}/debian ${codename}-backports main contrib non-free${NFW}
+${sid_prefix}deb ${http}://${domain}/debian ${codename}-backports main contrib non-free${NFW}
+${sid_prefix}${src_prefix}deb-src ${http}://${domain}/debian ${codename}-backports main contrib non-free${NFW}
 
-deb ${secure_url} ${codename}${security_appendix} main contrib non-free${NFW}
-${src_prefix}deb-src ${http}://security.debian.org/debian-security ${codename}${security_appendix} main contrib non-free${NFW}
+${sid_prefix}deb ${secure_url} ${codename}${security_appendix} main contrib non-free${NFW}
+${sid_prefix}${src_prefix}deb-src ${http}://security.debian.org/debian-security ${codename}${security_appendix} main contrib non-free${NFW}
 
 EOF" || {
 		print_error "Failed to add mirror to ${config_file}"
