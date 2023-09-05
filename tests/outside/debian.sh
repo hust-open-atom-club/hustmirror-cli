@@ -4,10 +4,9 @@ set -e
 ROOT_DIR=$(realpath `pwd`/../../)
 
 images="
-debian:12
+debian:12-slim
 debian:11-slim
 debian:10-slim
-debian:9-slim
 debian:sid-slim
 debian:testing-slim
 "
