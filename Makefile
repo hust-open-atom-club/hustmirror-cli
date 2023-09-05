@@ -1,4 +1,4 @@
-.PHONY: all clean dump
+.PHONY: all clean dump test
 .DEFAULT_GOAL := all
 
 SRC_DIR := src
@@ -14,6 +14,9 @@ OUT_MIRROR_FILES := $(patsubst $(MIRROR_DIR)/%,$(OUT_MIRROR_DIR)/%,$(MIRROR_FILE
 
 all: $(OUT_FILE)
 	@echo "Done, object script is $(OUT_FILE)."
+
+test: $(OUT_FILE)
+	@tests/test.sh
 
 $(OUT_FILE): $(TEMPLATE_FILE) $(OUT_MIRROR_FILES) $(INCLUDE_FILES) $(OTHER_FILES)
 	@mkdir -p $(OUT_DIR)
