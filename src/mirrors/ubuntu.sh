@@ -1,8 +1,6 @@
 check() {
 	source_os_release
-	result=0
-	[ "$NAME" = "Ubuntu" ] || result=$?
-	return $result
+	[ "$NAME" = "Ubuntu" ]
 }
 
 install() {

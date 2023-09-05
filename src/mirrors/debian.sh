@@ -1,17 +1,17 @@
 check() {
 	source_os_release
-	result=0
-	[ "$NAME" = "Debian GNU/Linux" ] || result=$?
-	return $result
+	[ "$NAME" = "Debian GNU/Linux" ]
 }
 
-install() {
+_debian_set_config_file() {
 	config_file="/etc/apt/sources.list"
-
 	if ! [ -f $config_file ]; then # rule for docker
 		config_file="/etc/apt/sources.list.d/debian.list"
 	fi
+}
 
+install() {
+	_debian_set_config_file
 	source_os_release
 	codename=${VERSION_CODENAME}
 	echo "$PRETTY_NAME" | grep "sid" > /dev/null && {
@@ -86,7 +86,7 @@ EOF" || {
 }
 
 uninstall() {
-	config_file="/etc/apt/sources.list"
+	_debian_set_config_file
 	set_sudo
 	$sudo mv ${config_file}.bak ${config_file} || {
 		print_error "Failed to recover ${config_file}"
@@ -95,14 +95,15 @@ uninstall() {
 }
 
 is_deployed() {
-	config_file="/etc/apt/sources.list"
+	_debian_set_config_file
 	result=0
 	$sudo grep -q "${gen_tag}" ${config_file} || result=$?
 	return $result
 }
 
 can_recover() {
-	bak_file="/etc/apt/sources.list.bak"
+	_debian_set_config_file
+	bak_file="$config_file.bak"
 	result=0
 	test -f $bak_file || result=$?
 	return $result

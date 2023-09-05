@@ -2,9 +2,7 @@ _arch_config_file="/etc/pacman.d/mirrorlist"
 
 check() {
 	source_os_release
-	result=0
-	[ "$NAME" = "Arch Linux" ] || result=$?
-	return $result
+	[ "$NAME" = "Arch Linux" ]
 }
 
 install() {
