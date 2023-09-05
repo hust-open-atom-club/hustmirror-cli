@@ -15,6 +15,11 @@ into a single executable bash.
 make
 ```
 
+## Test
+```shell
+make test
+```
+
 output script will be placed in `/output/hustmirror.sh`
 
 ## Contract
