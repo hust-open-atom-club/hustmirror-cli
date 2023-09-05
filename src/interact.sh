@@ -13,7 +13,10 @@ interact_recover() {
 }
 
 interact_deploy() {
-
+	for item in $@
+	do
+		deploy $item
+	done
 }
 
 interact_main() {
@@ -44,16 +47,15 @@ interact_main() {
 
 		case "$input" in
 			a | all)
-				install_things="$ready_to_install"
+				interact_deploy $ready_to_install
 				break
 				;;
 			a! | all!)
-				install_things="$ready_to_install $unsure_to_install"
+				interact_deploy $ready_to_install $unsure_to_install
 				break
 				;;
 			l | list)
 				print_supported
-				break
 				;;
 			q | quit)
 				exit 0
@@ -64,9 +66,10 @@ interact_main() {
 				;;
 			i | install)
 				install
+				break
 				;;
 			*)
-				install_things="$input"
+				interact_deploy $input
 				break
 				;;
 		esac

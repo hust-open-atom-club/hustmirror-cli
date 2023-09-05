@@ -42,6 +42,9 @@ supported_softwares="@var(ls -1 src/mirrors/* | sed -E 's/^.+\/(.+)\.[^.]*$/\1/'
 
 @mirrors
 
+@include core.sh
+@include cli.sh
+@include interact.sh
 @include bootstrap.sh
 
 # vim: set filetype=sh ts=4 sw=4 noexpandtab:
