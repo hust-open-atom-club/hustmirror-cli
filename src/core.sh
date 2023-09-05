@@ -1,5 +1,32 @@
+source_config() {
+	hustmirror_config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/hustmirror"
+	hustmirror_config="${hustmirror_config_dir}/hustmirror.conf"
+	if [ -f "${hustmirror_config}" ]; then
+		. "${hustmirror_config}" || {
+			print_error "Failed to read configuration file: ${hustmirror_config}"
+			return 1
+		}
+	else
+		return 1
+	fi
+}
+
+save_config() {
+	hustmirror_config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/hustmirror"
+	hustmirror_config="${hustmirror_config_dir}/hustmirror.conf"
+	mkdir -p "${hustmirror_config_dir}"
+	cat <<EOF > "${hustmirror_config}"
+# ${gen_tag}
+domain="${domain}"
+http="${http}"
+EOF
+}
+
 regist_config() {
 	print_warning "No configuration file found."
+	if ! is_tty; then
+		return 0
+	fi
 	if confirm_y "Do you want to autogenerate a default configuration file?"; then
 		save_config
 	else
@@ -16,6 +43,9 @@ regist_config() {
 load_config() {
 	print_status "Reading configuration file..."
 	source_config || regist_config
+	[ -n "$HM_HTTP" ] && http=$HM_HTTP
+	[ -n "$HM_DOMAIN" ] && domain=$HM_DOMAIN
+	true
 }
 
 # $1 disable output when is not zero string

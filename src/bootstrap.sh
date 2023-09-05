@@ -1,5 +1,6 @@
 # bootstrap
 print_logo
+load_config
 # parse arguments
 case "$1" in
 	-h | --help) # print help

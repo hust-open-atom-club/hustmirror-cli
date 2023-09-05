@@ -25,30 +25,6 @@ source_os_release() {
 	. "${os_release}"
 }
 
-source_config() {
-	hustmirror_config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/hustmirror"
-	hustmirror_config="${hustmirror_config_dir}/hustmirror.conf"
-	if [ -f "${hustmirror_config}" ]; then
-		. "${hustmirror_config}" || {
-			print_error "Failed to read configuration file: ${hustmirror_config}"
-			return 1
-		}
-	else
-		return 1
-	fi
-}
-
-save_config() {
-	hustmirror_config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/hustmirror"
-	hustmirror_config="${hustmirror_config_dir}/hustmirror.conf"
-	mkdir -p "${hustmirror_config_dir}"
-	cat <<EOF > "${hustmirror_config}"
-# ${gen_tag}
-domain="${domain}"
-http="${http}"
-EOF
-}
-
 is_root() {
 	[ "$(id -u)" -eq 0 ] 
 }

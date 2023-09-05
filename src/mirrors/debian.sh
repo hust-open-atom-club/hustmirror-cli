@@ -18,7 +18,7 @@ install() {
 
 	secure_url="${http}://${domain}/debian-security/"
 	confirm_y "Use official secure source?" && \
-		secure_url="https://security.debian.org/debian-security"
+		secure_url="${http}://security.debian.org/debian-security"
 
 	src_prefix="# "
 	confirm "Use source code?" && \
