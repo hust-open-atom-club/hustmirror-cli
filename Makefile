@@ -6,6 +6,7 @@ INCLUDE_FILES := $(wildcard $(SRC_DIR)/*.sh)
 MIRROR_DIR := $(SRC_DIR)/mirrors
 TEMPLATE_FILE := $(SRC_DIR)/main.sh.template
 MIRROR_FILES := $(wildcard $(MIRROR_DIR)/*)
+OTHER_FILES := domains version
 OUT_DIR := output
 OUT_FILE := $(OUT_DIR)/hust-mirror.sh
 OUT_MIRROR_DIR := $(OUT_DIR)/mirrors
@@ -14,7 +15,7 @@ OUT_MIRROR_FILES := $(patsubst $(MIRROR_DIR)/%,$(OUT_MIRROR_DIR)/%,$(MIRROR_FILE
 all: $(OUT_FILE)
 	@echo "Done, object script is $(OUT_FILE)."
 
-$(OUT_FILE): $(TEMPLATE_FILE) $(OUT_MIRROR_FILES) $(INCLUDE_FILES)
+$(OUT_FILE): $(TEMPLATE_FILE) $(OUT_MIRROR_FILES) $(INCLUDE_FILES) $(OTHER_FILES)
 	@mkdir -p $(OUT_DIR)
 	@echo "Process $<"
 	@scripts/template-instantiate.py $< > $@.tmp
