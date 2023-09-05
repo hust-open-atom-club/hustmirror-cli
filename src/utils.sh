@@ -1,22 +1,22 @@
 print_logo() {
-	echo ' _   _ _   _ ____ _____ __  __ ___ ____  ____   ___  ____  '
-	echo '| | | | | | / ___|_   _|  \/  |_ _|  _ \|  _ \ / _ \|  _ \ '
-	echo '| |_| | | | \___ \ | | | |\/| || || |_) | |_) | | | | |_) |'
-	echo '|  _  | |_| |___) || | | |  | || ||  _ <|  _ <| |_| |  _ < '
-	echo '|_| |_|\___/|____/ |_| |_|  |_|___|_| \_\_| \_\\___/|_| \_\'
-	echo
-	echo "hustmirror-cli ${script_version} build ${build_time}"
+	r_echo ' _   _ _   _ ____ _____ __  __ ___ ____  ____   ___  ____  '
+	r_echo '| | | | | | / ___|_   _|  \/  |_ _|  _ \|  _ \ / _ \|  _ \ '
+	r_echo '| |_| | | | \___ \ | | | |\/| || || |_) | |_) | | | | |_) |'
+	r_echo '|  _  | |_| |___) || | | |  | || ||  _ <|  _ <| |_| |  _ < '
+	r_echo '|_| |_|\___/|____/ |_| |_|  |_|___|_| \_\_| \_\\___/|_| \_\'
+	r_echo
+	r_echo "hustmirror-cli ${script_version} build ${build_time}"
 }
 
 display_help() {
 	print_logo
-	echo "A CLI Bash script to generate a configuration file"
-	echo "for software repository on different distributions"
-	echo
-	echo "Usage: $0 [option...] " >&2
-	echo
-	echo "   -h, --help                 Display help message"
-	echo
+	r_echo "A CLI Bash script to generate a configuration file"
+	r_echo "for software repository on different distributions"
+	r_echo
+	r_echo "Usage: $0 [option...] " >&2
+	r_echo
+	r_echo "   -h, --help                 Display help message"
+	r_echo
 }
 
 source_os_release() {
@@ -80,6 +80,14 @@ is_tty() {
 c_echo() {
 	if has_command printf; then
 		printf "$*\n"
+	else
+		echo "$*"
+	fi
+}
+
+r_echo() {
+	if has_command printf; then
+		printf "%s\n" "$*"
 	else
 		echo "$*"
 	fi
