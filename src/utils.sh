@@ -142,6 +142,7 @@ print_question() {
 }
 
 get_input() {
+	if ! is_tty; then return 1; fi
 	[ -n "${1}" ] && print_question "${1}"
 	read -r -p "[>] " input
 	if [ -z "${input}" ]; then
@@ -150,6 +151,7 @@ get_input() {
 }
 
 confirm() {
+	if ! is_tty; then return 1; fi
 	# call with a prompt string or use a default
 	get_input "${1:-Are you sure?} [y/N]"
 	case "${input}" in
@@ -163,6 +165,7 @@ confirm() {
 }
 
 confirm_y() {
+	if ! is_tty; then return 0; fi
 	# call with a prompt string or use a default
 	get_input "${1:-Are you sure?} [Y/n]"
 	case "${input}" in
