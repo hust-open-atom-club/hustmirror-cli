@@ -6,7 +6,9 @@ check() {
 _debian_set_config_file() {
 	config_file="/etc/apt/sources.list"
 	if ! [ -f $config_file ]; then # rule for docker
-		config_file="/etc/apt/sources.list.d/debian.list"
+		old_file="/etc/apt/sources.list.d/debian.sources"
+	else
+		old_file=$config_file
 	fi
 }
 
@@ -88,25 +90,21 @@ EOF" || {
 uninstall() {
 	_debian_set_config_file
 	set_sudo
-	$sudo mv ${config_file}.bak ${config_file} || {
-		print_error "Failed to recover ${config_file}"
+	$sudo sh -c "rm ${config_file}; mv ${old_file}.bak ${old_file}" || {
+		print_error "Failed to recover ${old_file}"
 		return 1
 	}
 }
 
 is_deployed() {
 	_debian_set_config_file
-	result=0
-	$sudo grep -q "${gen_tag}" ${config_file} || result=$?
-	return $result
+	$sudo grep -q "${gen_tag}" ${config_file}
 }
 
 can_recover() {
 	_debian_set_config_file
-	bak_file="$config_file.bak"
-	result=0
-	test -f $bak_file || result=$?
-	return $result
+	bak_file="$old_file.bak"
+	test -f $bak_file
 }
 
 # vim: set filetype=sh ts=4 sw=4 noexpandtab:
