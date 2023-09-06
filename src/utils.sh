@@ -8,17 +8,6 @@ print_logo() {
 	r_echo "hustmirror-cli ${script_version} build ${build_time}"
 }
 
-display_help() {
-	print_logo
-	r_echo "A CLI Bash script to generate a configuration file"
-	r_echo "for software repository on different distributions"
-	r_echo
-	r_echo "Usage: $0 [option...] " >&2
-	r_echo
-	r_echo "   -h, --help                 Display help message"
-	r_echo
-}
-
 source_os_release() {
 	# /etc/os-release does exist in most Linux distributions, and BSD variants
 	test -e /etc/os-release && os_release='/etc/os-release' || os_release='/usr/lib/os-release'

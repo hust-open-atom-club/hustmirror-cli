@@ -15,6 +15,7 @@ domain="hustmirror.cn"
 http="https"
 
 @include utils.sh
+@include help.sh
 
 # Not only to replace distributions but also softwares like pypi,
 # npm registry, dockerhub, etc.
