@@ -14,13 +14,13 @@ install() {
 		return 1
 	}
 
-  new_file=$(sed -E "s|https?://([^/]+)|${http}://hustmirror.cn/openeuler|" $config_file)
-  {
+	new_file=$(sed -E "s|https?://([^/]+)|${http}://hustmirror.cn/openeuler|" $config_file)
+	{
 		cat << EOF | $sudo tee ${config_file} > /dev/null
 # ${gen_tag}
 ${new_file}
 EOF
-  } || {
+	} || {
 		print_error "Failed to add mirror to ${config_file}"
 		return 1
 	}
