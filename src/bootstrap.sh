@@ -2,12 +2,16 @@
 print_logo
 # parse arguments
 case "$1" in
+	'') # no arguments
+		display_help $@
+		exit 0
+		;;
 	-h | --help | help) # print help
 		shift 1
 		display_help $@
 		exit 0
 		;;
-	-i | '') # Enter interact mode
+	-i) # Enter interact mode
 		load_config
 		interact_main
 		;;
