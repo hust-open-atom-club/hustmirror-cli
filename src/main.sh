@@ -1,9 +1,7 @@
 #!/usr/bin/env sh
 # httpmirror-cli - a CLI posix shell script to replace softwares' registry mirror
 
-: << LICENSE_EOF
-@include ../LICENSE
-LICENSE_EOF
+@var(sed "s/^/# /" LICENSE)
 
 set -e
 
