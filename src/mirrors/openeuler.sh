@@ -14,7 +14,7 @@ install() {
 		return 1
 	}
 
-  new_file=$(sed -E "s|https?://([^/]+)|https://hustmirror.cn/openeuler|" $config_file)
+  new_file=$(sed -E "s|https?://([^/]+)|${http}://hustmirror.cn/openeuler|" $config_file)
   {
 		cat << EOF | $sudo tee ${config_file} > /dev/null
 # ${gen_tag}
