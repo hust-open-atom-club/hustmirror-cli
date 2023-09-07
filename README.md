@@ -1,11 +1,13 @@
 # hustmirror-cli
 
 ## Introduction
-命令行工具(hustmirror-cli)是一个可以帮助你快速换源的小工具。
+
+`httpmirror` is a CLI posix shell script to replace softwares'
+registry mirror.
 
 ## Usage
 ```
-curl -s https://hustmirror.cn/get | sh
+curl -s https://hustmirror.cn/get | sh -s -- autodeploy
 ```
 
 ## Build
