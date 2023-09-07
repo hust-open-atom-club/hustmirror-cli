@@ -118,7 +118,7 @@ install() {
 		exit 1
 	}
 	print_status "Downloading latest hust-mirror..."
-	curl -sL "${http}://${domain}/get.sh" > "$install_target" || {
+	curl -sL "${http}://${domain}/get" > "$install_target" || {
 		print_error "Failed to download hust-mirror."
 		exit 1
 	}
