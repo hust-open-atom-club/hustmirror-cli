@@ -39,7 +39,13 @@ has_sed() {
 }
 
 is_tty() {
-	sh -c "exec < /dev/tty" >/dev/null 2>&1
+	# cache it to avoid too many forks
+	[ -z "$IS_TTY" ] && {
+		IS_TTY=0
+		# check if stdout is a tty, if is, then check if /dev/tty is readable
+		[ -t 1 ] && sh -c "exec < /dev/tty" >/dev/null 2>&1 || IS_TTY=1
+	} 
+	return $IS_TTY
 }
 
 c_echo() {
