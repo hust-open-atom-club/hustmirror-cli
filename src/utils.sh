@@ -39,7 +39,7 @@ has_sed() {
 }
 
 is_tty() {
-	[ -t 0 ] || sh -c "exec < /dev/tty" >/dev/null 2>&1
+	sh -c "exec < /dev/tty" >/dev/null 2>&1
 }
 
 c_echo() {
