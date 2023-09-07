@@ -39,7 +39,7 @@ has_sed() {
 }
 
 is_tty() {
-	[ -t 0 ]
+	[ -t 0 ] || sh -c "exec < /dev/tty" >/dev/null 2>&1
 }
 
 c_echo() {
@@ -123,7 +123,7 @@ get_input() {
 		return 1
 	fi
 	[ -n "${1}" ] && print_question "${1}"
-	read -r -p "[>] " input
+	read -r -p "[>] " input </dev/tty
 	if [ -z "${input}" ]; then
 		input="${2}"
 	fi
