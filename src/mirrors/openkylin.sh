@@ -32,6 +32,8 @@ EOF
 			return 1
 		}
 	}
+
+	true
 }
 
 uninstall() {

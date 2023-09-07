@@ -85,6 +85,7 @@ EOF" || {
 		}
 	}
 
+	true
 }
 
 uninstall() {
