@@ -17,7 +17,7 @@ into a single executable bash.
 make
 ```
 
-output script will be placed in `/output/hustmirror.sh`
+output script will be placed in `./output/hustmirror.sh`
 
 ## Test
 ```shell
