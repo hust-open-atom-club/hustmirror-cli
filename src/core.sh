@@ -146,6 +146,11 @@ install() {
 # $1 software to recover
 recover() {
 	software=$1
+	if has_command _${software}_check && ! _${software}_check; then
+		print_error "${software} is suitable here."
+		return
+	fi
+
 	if has_command _${software}_can_recover && _${software}_can_recover; then
 		print_success "${software} can be recoverd."
 	else
