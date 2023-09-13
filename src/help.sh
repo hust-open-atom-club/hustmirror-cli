@@ -80,6 +80,9 @@ Check the system and deploy suggested configuration file.
 Usage: $program autodeploy
        $program ad (alias)
 
+Options: (optional)
+   -y                         Answer default option to all questions
+
 EOF
 )
 
