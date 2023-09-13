@@ -121,6 +121,9 @@ set_mirror_recover_list() {
 # install hust-mirror
 install() {
 	install_path="$HOME/.local/bin"
+	if is_root; then
+		install_path="/usr/local/bin"
+	fi 
 	install_target="$install_path/hustmirror"
 	if [ ! -d "$install_path" ]; then
 		mkdir -p "$install_path"
