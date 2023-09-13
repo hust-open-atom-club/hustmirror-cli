@@ -22,6 +22,7 @@ Commands: (use \`$program help [command]\` to get more information)
    deploy                     Deploy the configuration file
    autodeploy                 Deploy suggested configuration file
    recover                    Recover the configuration file
+   autorecover                Recover deployed and recoverable configuration file
    install                    Install this script to user's local bin
 
 Commands alias:
@@ -29,6 +30,7 @@ Commands alias:
    d                          deploy
    ad                         autodeploy
    r                          recover
+   ar                         autorecover
    i|u|update                 install
 
 Examples:
@@ -107,9 +109,23 @@ Note: This command will install the script to ~/.local/bin, and add it to
 EOF
 )
 
+_help_autorecover=$(cat <<EOF
+Recover deployed and recoverable configuration file.
+
+Usage: $program autorecover
+       $program ar (alias)
+
+Note: This command will only recover the configuration file that can be recovered,
+      if you don't use this tool to deploy or have deployed some configurations not 
+      support to recover, you can't recover it.
+
+EOF
+)
+
 _help_d=${_help_deploy}
 _help_ad=${_help_autodeploy}
 _help_r=${_help_recover}
+_help_ar=${_help_autorecover}
 _help_i=${_help_install}
 _help_u=${_help_install}
 _help_h=${_help_help}
