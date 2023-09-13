@@ -5,8 +5,8 @@ else
 	program=$(basename "$0")
 fi
 
-# help text, define _(topic)_help variable
-_basic_help=$(cat <<EOF
+# help text, define _help_(topic) variable
+_help_basic=$(cat <<EOF
 A CLI posix shell script to generate a configuration file for software
 repository on different distributions.
 
@@ -61,7 +61,7 @@ Examples:
 EOF
 )
 
-_deploy_help=$(cat <<EOF
+_help_deploy=$(cat <<EOF
 Deploy the configuration file.
 
 Usage: $program deploy [targets...]
@@ -74,7 +74,7 @@ Examples:
 EOF
 )
 
-_autodeploy_help=$(cat <<EOF
+_help_autodeploy=$(cat <<EOF
 Check the system and deploy suggested configuration file.
 
 Usage: $program autodeploy
@@ -83,7 +83,7 @@ Usage: $program autodeploy
 EOF
 )
 
-_recover_help=$(cat <<EOF
+_help_recover=$(cat <<EOF
 Recover the configuration file.
 
 Usage: $program recover [targets...]
@@ -92,7 +92,7 @@ Usage: $program recover [targets...]
 EOF
 )
 
-_install_help=$(cat <<EOF
+_help_install=$(cat <<EOF
 Install (Update) this script online to user's local bin.
 
 Usage: $program install
@@ -104,16 +104,16 @@ Note: This command will install the script to ~/.local/bin, and add it to
 EOF
 )
 
-_d_help=${_deploy_help}
-_ad_help=${_autodeploy_help}
-_r_help=${_recover_help}
-_i_help=${_install_help}
-_u_help=${_install_help}
-_h_help=${_help_help}
-_update_help=${_install_help}
+_help_d=${_help_deploy}
+_help_ad=${_help_autodeploy}
+_help_r=${_help_recover}
+_help_i=${_help_install}
+_help_u=${_help_install}
+_help_h=${_help_help}
+_help_update=${_help_install}
 
 
-_debian_help=$(cat <<EOF
+_help_debian=$(cat <<EOF
 Debian mirror configuration.
 
 Environments:
@@ -126,12 +126,12 @@ EOF
 display_help() {
     echo
 
-	if [ -z "$1" ] || [ "$1" = "basic" ]; then
-		r_echo "$_basic_help"
+	if [ -z "$1" ]; then
+		r_echo "$_help_basic"
         return
 	fi
 
-	eval help_text=\"\${_${1}_help}\"
+	eval help_text=\"\${_help_${1}}\"
 
 	if [ -z "$help_text" ]; then
 		print_error "No help information for $1"
