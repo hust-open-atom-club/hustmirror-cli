@@ -98,7 +98,9 @@ set_mirror_recover_list() {
 	ready_to_uninstall=""
 	for software in $supported_softwares; do
 		# check if the software is ready to recover
-		if has_command _${software}_can_recover && _${software}_can_recover; then
+		if has_command _${software}_check && _${software}_check &&\
+		   has_command _${software}_can_recover && _${software}_can_recover
+		then
 			ready_to_uninstall="$ready_to_uninstall ${software}"
 		fi
 	done
