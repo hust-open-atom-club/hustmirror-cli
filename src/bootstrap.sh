@@ -6,6 +6,9 @@ case "$1" in
 		display_help $@
 		exit 0
 		;;
+	-V | --version)
+		exit 0
+		;;
 	-h | --help | help) # print help
 		shift 1
 		display_help $@
