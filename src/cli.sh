@@ -18,6 +18,13 @@ cli_recover() {
 	done
 }
 
+cli_autorecover() {
+	set_mirror_recover_list no
+	for item in $ready_to_uninstall
+	do
+		recover $item || print_error "Failed to recover $item. Ignoring..."
+	done
+}
 
 cli_main() {
 	# parse arguments
@@ -41,6 +48,9 @@ cli_main() {
 			;;
 		install | i | update | up)
 			install
+			;;
+		autorecover | ar)
+			cli_autorecover
 			;;
 		*)
 			print_error "Unknown argument $1, exit."
