@@ -139,7 +139,7 @@ install() {
 	}
 	chmod +x "$install_target"
 	print_success "Successfully install hust-mirror."
-	has_command hustmirror || print_warning "It seems ~/.local/bin is not in your path."
+	has_command hustmirror || print_warning "It seems ~/.local/bin is not in your path, try to add it to your PATH in ~/.bashrc or ~/.zshrc."
 	print_success "Now, you can use \`hustmirror\` in your command line"
 }
 
