@@ -9,13 +9,22 @@ source_config() {
 	else
 		return 1
 	fi
+	for edomain in $domains; do
+		if [ "$domain" = "$edomain" ]; then
+			_flag=1
+		fi
+	done
+	if [ -z "$_flag" ]; then
+		print_error "Domains has been update, your configuration file need regenerate."
+		return 1
+	fi
 }
 
 save_config() {
 	hustmirror_config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/hustmirror"
 	hustmirror_config="${hustmirror_config_dir}/hustmirror.conf"
 	mkdir -p "${hustmirror_config_dir}"
-	cat <<EOF > "${hustmirror_config}"
+	cat <<EOF >"${hustmirror_config}"
 # ${gen_tag}
 domain="${domain}"
 http="${http}"
@@ -33,9 +42,9 @@ regist_config() {
 		select_from_menu "Choose your prefer domain" $domains
 		domain=$result
 		http=https
-		confirm_y "Do you want to use https rather than http?" || \
+		confirm_y "Do you want to use https rather than http?" ||
 			http=http
-		confirm_y "Do you want to save the configuration?" && \
+		confirm_y "Do you want to save the configuration?" &&
 			save_config
 	fi
 }
@@ -113,12 +122,12 @@ install() {
 	if [ ! -d "$install_path" ]; then
 		mkdir -p "$install_path"
 	fi
-	has_command curl || { 
-		print_error "curl is required." 
+	has_command curl || {
+		print_error "curl is required."
 		exit 1
 	}
 	print_status "Downloading latest hust-mirror..."
-	curl -sL "${http}://${domain}/get" > "$install_target" || {
+	curl -sL "${http}://${domain}/get" >"$install_target" || {
 		print_error "Failed to download hust-mirror."
 		exit 1
 	}
@@ -133,7 +142,7 @@ recover() {
 	software=$1
 	if has_command _${software}_can_recover && _${software}_can_recover; then
 		print_success "${software} can be recoverd."
-	else 
+	else
 		print_error "${software} can not be recoverd."
 		return 1
 	fi
