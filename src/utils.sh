@@ -208,4 +208,9 @@ select_from_menu() {
 	done
 }
 
+set_default_domain() {
+	set -- $*
+	domain=$1
+}
+
 # vim: set filetype=sh ts=4 sw=4 noexpandtab:

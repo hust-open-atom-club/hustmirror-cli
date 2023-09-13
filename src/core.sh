@@ -16,6 +16,7 @@ source_config() {
 	done
 	if [ -z "$_flag" ]; then
 		print_error "Domains has been update, your configuration file need regenerate."
+		set_default_domain $domains
 		return 1
 	fi
 }
