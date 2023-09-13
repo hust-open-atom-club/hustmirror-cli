@@ -121,7 +121,7 @@ print_question() {
 }
 
 get_input() {
-	if ! is_tty; then
+	if ! is_tty || [ "$silent_input" = "y" ]; then
 		if [ -n "${2}" ]; then
 			input="${2}"
 			return 0
@@ -136,9 +136,8 @@ get_input() {
 }
 
 confirm() {
-	if ! is_tty; then return 1; fi
 	# call with a prompt string or use a default
-	get_input "${1:-Are you sure?} [y/N]"
+	get_input "${1:-Are you sure?} [y/N]" "n"
 	case "${input}" in
 		[yY][eE][sS]|[yY])
 			true
@@ -150,9 +149,8 @@ confirm() {
 }
 
 confirm_y() {
-	if ! is_tty; then return 0; fi
 	# call with a prompt string or use a default
-	get_input "${1:-Are you sure?} [Y/n]"
+	get_input "${1:-Are you sure?} [Y/n]" "y"
 	case "${input}" in
 		[nN][oO]|[nN])
 			false

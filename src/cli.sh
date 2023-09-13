@@ -23,8 +23,10 @@ cli_main() {
 	# parse arguments
 	case "$1" in
 		autodeploy | ad)
+			[ "$2" = "-y" ] && silent_input="y"
 			set_mirror_list no
 			cli_deploy $ready_to_install
+			unset silent_input
 			;;
 		deploy | d)
 			shift 1
