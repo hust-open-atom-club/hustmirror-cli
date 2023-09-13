@@ -9,6 +9,7 @@ source_config() {
 	else
 		return 1
 	fi
+	unset _flag
 	for edomain in $domains; do
 		if [ "$domain" = "$edomain" ]; then
 			_flag=1
