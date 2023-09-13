@@ -156,6 +156,18 @@ recover() {
 # $1 software to deploy
 deploy() {
 	software=$1
+
+	# check if the software is ready to deploy
+	if has_command _${software}_check && _${software}_check; then
+		if has_command _${software}_is_deployed && _${software}_is_deployed; then
+			print_error "${software} has been deployed."
+			return
+		fi
+	else
+		print_error "${software} is suitable here."
+		return
+	fi
+
 	if has_command _${software}_install; then
 		print_status "Deploying ${software}..."
 		result=0
