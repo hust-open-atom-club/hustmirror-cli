@@ -38,7 +38,7 @@ install() {
 	fi
 
 	secure_url="${http}://${domain}/debian-security/"
-	confirm_y "Use official secure source?" && \
+	confirm_y "Use official secure source? (Strongly recommended)" && \
 		secure_url="${http}://security.debian.org/debian-security"
 
 	src_prefix="# "

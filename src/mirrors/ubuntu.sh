@@ -15,7 +15,7 @@ install() {
 	}
 
 	secure_url="${http}://${domain}/ubuntu/"
-	confirm_y "Use official secure source?" && \
+	confirm_y "Use official secure source? (Strongly recommended)" && \
 		secure_url="http://security.ubuntu.com/ubuntu/"
 
 	propoesd_prefix="# "
