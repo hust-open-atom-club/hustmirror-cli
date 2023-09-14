@@ -15,7 +15,7 @@ install() {
 		return 1
 	}
 
-	new_file=$(sed -E -e "s|https?://([^/]+)/openkylin|${http}://hustmirror.cn/openkylin|" $config_file)
+	new_file=$(sed -E -e "s|https?://([^/]+)/openkylin|${http}://${domain}/openkylin|" $config_file)
 	{
 		cat << EOF | $sudo tee ${config_file} > /dev/null
 # ${gen_tag}

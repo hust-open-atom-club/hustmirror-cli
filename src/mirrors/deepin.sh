@@ -20,7 +20,7 @@ install() {
 		return 1
 	}
 
-	new_file=$(sed -E -e "s|https?://([^/]+)/deepin|${http}://hustmirror.cn/deepin|" -e "s|https?://([^/]+)/${codename}|${http}://hustmirror.cn/deepin/${codename}|" $config_file)
+	new_file=$(sed -E -e "s|https?://([^/]+)/deepin|${http}://${domain}/deepin|" -e "s|https?://([^/]+)/${codename}|${http}://${domain}/deepin/${codename}|" $config_file)
 	{
 		cat << EOF | $sudo tee ${config_file} > /dev/null
 # ${gen_tag}
