@@ -3,7 +3,7 @@ set -e
 
 source "$(realpath ${BASH_SOURCE%/*}/..)/utils.sh"
 
-# http="http"
+http="http"
 images="kalilinux/kali-rolling"
 test_file="kali.sh"
 

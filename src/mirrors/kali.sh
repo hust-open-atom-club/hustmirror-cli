@@ -4,7 +4,6 @@ check() {
 }
 
 install() {
-    http="http"
     config_file="/etc/apt/sources.list"
     source_os_release
 
