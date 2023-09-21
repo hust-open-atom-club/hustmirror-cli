@@ -20,7 +20,7 @@ install() {
 		if [ "$HM_DEBIAN_SID" = "true" ]; then
 			codename="sid"
 		else
-			print_warning "hustmirror cannot distinguish sid or testing"
+			print_warning "hustmirror-cli cannot distinguish sid or testing"
 			get_input "Please input codename (sid/testing): " "testing"
 			codename="$input"
 		fi

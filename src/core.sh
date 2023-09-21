@@ -125,7 +125,7 @@ install() {
 	if ! is_root; then
 		print_warning "Install hust-mirror to /usr/local/bin need root permission."
 	fi
-	install_target="$install_path/hustmirror"
+	install_target="$install_path/hustmirror-cli"
 	set_sudo
 	if [ ! -d "$install_path" ]; then
 		print_status "Creating directory: $install_path"
@@ -137,13 +137,13 @@ install() {
 	}
 	print_status "Downloading latest hust-mirror..."
 	$sudo curl -sSfL "${http}://${domain}/get" -o "$install_target" || {
-		print_error "Failed to download hust-mirror."
+		print_error "Failed to download hustmirror-cli."
 		exit 1
 	}
 	$sudo chmod +x "$install_target"
-	print_success "Successfully install hust-mirror."
-	has_command hustmirror || print_warning "It seems /usr/local/bin is not in your path, try to add it to your PATH in ~/.bashrc or ~/.zshrc."
-	print_success "Now, you can use \`hustmirror\` in your command line"
+	print_success "Successfully install hustmirror-cli."
+	has_command hustmirror-cli || print_warning "It seems /usr/local/bin is not in your path, try to add it to your PATH in ~/.bashrc or ~/.zshrc."
+	print_success "Now, you can use \`hustmirror-cli\` in your command line"
 }
 
 # $1 software to recover
