@@ -7,7 +7,7 @@ registry mirror.
 
 ## Usage
 ```
-curl -s https://hustmirror.cn/get | sh -s -- autodeploy
+curl -s https://mirrors.hust.college/get | sh -s -- autodeploy
 ```
 
 ## Build
