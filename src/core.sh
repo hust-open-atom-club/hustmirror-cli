@@ -142,6 +142,7 @@ install() {
 	}
 	$sudo chmod +x "$install_target"
 	print_success "Successfully install hustmirror-cli."
+	$sudo ln -sf $install_target "$install_path/hustmirror" # make link for legacy name
 	has_command hustmirror-cli || print_warning "It seems /usr/local/bin is not in your path, try to add it to your PATH in ~/.bashrc or ~/.zshrc."
 	print_success "Now, you can use \`hustmirror-cli\` in your command line"
 }
