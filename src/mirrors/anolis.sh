@@ -1,14 +1,4 @@
-_anolis_configs=()
-
-_anolis_get_configs() {
-    local folder="/etc/yum.repos.d"
-
-    for file in "$folder"/*.repo; do
-        if [ -f "$file" ]; then
-        _anolis_configs+=("$file")
-        fi
-    done
-}
+_anolis_config_dir="/etc/yum.repos.d"
 
 check() {
 	source_os_release
@@ -18,10 +8,8 @@ check() {
 install() {
 	set_sudo
 
-    _anolis_configs=()
-    _anolis_get_configs
-
-    for config_file in "${_anolis_configs[@]}"; do
+    for config_file in ${_anolis_config_dir}/*.repo; do
+		[ -f "$config_file" ] || continue
         $sudo cp ${config_file} ${config_file}.bak || {
             print_error "Failed to backup ${config_file}"
             return 1
@@ -42,10 +30,8 @@ EOF
 
 is_deployed() {
 
-    _anolis_configs=()
-    _anolis_get_configs
-
-    for config_file in "${_anolis_configs[@]}"; do
+    for config_file in ${_anolis_config_dir}/*.repo; do
+		[ -f "$config_file" ] || continue
         if $sudo grep -q "${gen_tag}" "${config_file}"; then
             return 0
         fi
@@ -55,10 +41,9 @@ is_deployed() {
 }
 
 can_recover() {
-    _anolis_configs=()
-    _anolis_get_configs
 
-    for config_file in "${_anolis_configs[@]}"; do
+    for config_file in ${_anolis_config_dir}/*.repo; do
+		[ -f "$config_file" ] || continue
         if ! test -f "${config_file}.bak"; then
             return 1
         fi
@@ -69,11 +54,9 @@ can_recover() {
 
 uninstall() {
 	set_sudo
-    
-    _anolis_configs=()
-    _anolis_get_configs
 
-    for config_file in "${_anolis_configs[@]}"; do
+    for config_file in ${_anolis_config_dir}/*.repo; do
+		[ -f "$config_file" ] || continue
         $sudo mv ${config_file}.bak ${config_file} || {
             print_error "Failed to recover ${config_file}"
             return 1
