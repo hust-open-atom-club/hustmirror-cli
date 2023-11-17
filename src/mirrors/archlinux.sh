@@ -1,4 +1,4 @@
-_arch_config_file="/etc/pacman.d/mirrorlist"
+_archlinux_config_file="/etc/pacman.d/mirrorlist"
 
 check() {
 	source_os_release
@@ -6,7 +6,7 @@ check() {
 }
 
 install() {
-	config_file=$_arch_config_file
+	config_file=$_archlinux_config_file
 	set_sudo
 
 	$sudo cp ${config_file} ${config_file}.bak || {
@@ -28,21 +28,21 @@ EOF
 }
 
 is_deployed() {
-	config_file=$_arch_config_file
+	config_file=$_archlinux_config_file
 	result=0
 	$sudo grep -q "${gen_tag}" ${config_file} || result=$?
 	return $result
 }
 
 can_recover() {
-	bak_file=${_arch_config_file}.bak
+	bak_file=${_archlinux_config_file}.bak
 	result=0
 	test -f $bak_file || result=$?
 	return $result
 }
 
 uninstall() {
-	config_file=$_arch_config_file
+	config_file=$_archlinux_config_file
 	set_sudo
 	$sudo mv ${config_file}.bak ${config_file} || {
 		print_error "Failed to recover ${config_file}"
