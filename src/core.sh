@@ -150,6 +150,14 @@ install() {
 # $1 software to recover
 recover() {
 	software=$1
+
+	eval synonyms="\$_synonyms_${software}"
+
+	if [ -n "${synonyms}" ]; then
+		print_question "${software} is not supported, do you mean ${synonyms}?"
+		# not return to avoid synonyms get occupied by mirrors
+	fi
+
 	if has_command _${software}_check && ! _${software}_check; then
 		print_error "${software} is suitable here."
 		return
@@ -178,6 +186,13 @@ recover() {
 # $1 software to deploy
 deploy() {
 	software=$1
+
+	eval synonyms="\$_synonyms_${software}"
+
+	if [ -n "${synonyms}" ]; then
+		print_question "${software} is not supported, do you mean ${synonyms}?"
+		# not return to avoid synonyms get occupied by mirrors
+	fi
 
 	# check if the software is ready to deploy
 	if has_command _${software}_check && ! _${software}_check; then

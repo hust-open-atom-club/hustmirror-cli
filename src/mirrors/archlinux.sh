@@ -1,3 +1,4 @@
+_synonyms_arch="archlinux"
 _archlinux_config_file="/etc/pacman.d/mirrorlist"
 
 check() {
