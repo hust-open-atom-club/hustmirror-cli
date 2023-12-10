@@ -155,9 +155,7 @@ recover() {
 		return
 	fi
 
-	if has_command _${software}_can_recover && _${software}_can_recover; then
-		print_success "${software} can be recoverd."
-	else
+	if has_command _${software}_can_recover && ! _${software}_can_recover; then
 		print_error "${software} can not be recoverd."
 		return 1
 	fi
