@@ -31,7 +31,11 @@ EOF
 is_deployed() {
 	config_file=$_archlinux_config_file
 	result=0
-	$sudo grep -q "${gen_tag}" ${config_file} || result=$?
+	comment_pattern='^[^#]#Server = https://mirrors.hust.college/archlinux/\$repo/os/\$arch$'
+	pattern='^Server = https://mirror.hust.college/archlinux/\$repo/os/\$arch$'
+	grep -q "${gen_tag}" ${config_file} && ! grep -qE "${comment_pattern}" ${config_file} || result=$? 
+	# grep -q "${gen_tag}" ${config_file} && ! grep -qE $comment_pattern ${config_file} && grep -qE $pattern ${config_file}|| result=$?
+	# $sudo grep -q "${gen_tag}" ${config_file} || result=$?
 	return $result
 }
 
