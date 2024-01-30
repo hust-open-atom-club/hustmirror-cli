@@ -30,6 +30,7 @@ def replace_mirrors(str):
         for file in files:
             with open(file, 'r') as f:
                 str += f.read()
+                str += '\n'
         str += '# END MIRRORS\n'
     return str
 
