@@ -11,12 +11,16 @@ OUT_DIR := output
 OUT_FILE := $(OUT_DIR)/hustmirror-cli
 OUT_MIRROR_DIR := $(OUT_DIR)/mirrors
 OUT_MIRROR_FILES := $(patsubst $(MIRROR_DIR)/%,$(OUT_MIRROR_DIR)/%,$(MIRROR_FILES))
+INSTALL_DIR := /usr/local/bin/
 
 all: $(OUT_FILE)
 	@echo "Done, object script is $(OUT_FILE)."
 
 test: $(OUT_FILE)
 	@tests/test.sh
+
+install: $(OUT_FILE)
+	@cp $(OUT_FILE) $(INSTALL_DIR)
 
 $(OUT_FILE): $(TEMPLATE_FILE) $(OUT_MIRROR_FILES) $(INCLUDE_FILES) $(OTHER_FILES)
 	@mkdir -p $(OUT_DIR)
