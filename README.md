@@ -2,12 +2,11 @@
 
 ## Introduction
 
-`httpmirror` is a CLI posix shell script to replace softwares'
-registry mirror.
+`hustmirror-cli` is a CLI posix shell script to replace system repository mirror to HUST Mirror.
 
 ## Usage
 ```
-curl -s https://mirrors.hust.college/get | sh -s -- autodeploy
+curl -s https://mirrors.hust.edu.cn/get | sh -s -- autodeploy
 ```
 
 ## Build
