@@ -18,6 +18,10 @@ is_root() {
 	[ "$(id -u)" -eq 0 ] 
 }
 
+is_windows() {
+	uname -a | grep -qiE "cygwin|mingw|msys"
+}
+
 has_command() {
 	command -v "${1}" >/dev/null 2>&1
 }
