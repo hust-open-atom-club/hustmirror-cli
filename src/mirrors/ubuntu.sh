@@ -32,6 +32,9 @@ deb ${http}://${domain}/ubuntu/ ${codename} main restricted universe multiverse
 ${src_prefix}deb-src ${http}://${domain}/ubuntu/ ${codename} main restricted universe multiverse
 deb ${http}://${domain}/ubuntu/ ${codename}-updates main restricted universe multiverse
 ${src_prefix}deb-src ${http}://${domain}/ubuntu/ ${codename}-updates main restricted universe multiverse
+deb ${http}://${domain}/ubuntu/ ${codename}-backports main restricted universe multiverse
+${src_prefix}deb-src ${http}://${domain}/ubuntu/ ${codename}-backports main restricted universe multiverse
+
 deb ${secure_url} ${codename}-security main restricted universe multiverse
 ${src_prefix}deb-src ${secure_url} ${codename}-security main restricted universe multiverse
 
