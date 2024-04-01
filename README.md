@@ -6,21 +6,21 @@
 
 ## Supported Linux Distributions and Software
 
-[x] Alpine Linux
-[x] Anolis OS
-[x] Arch Linux
-[x] Black Arch
-[x] crates
-[x] Debian
-[x] Deepin
-[x] Kali
-[x] LinuxMint
-[x] openEuler
-[x] openKylin
-[x] pypi
-[x] Rustup
-[x] Ubuntu
-[x] Oh My Zsh
+- [x] Alpine Linux
+- [x] Anolis OS
+- [x] Arch Linux
+- [x] Black Arch
+- [x] crates
+- [x] Debian
+- [x] Deepin
+- [x] Kali
+- [x] LinuxMint
+- [x] openEuler
+- [x] openKylin
+- [x] pypi
+- [x] Rustup
+- [x] Ubuntu
+- [x] Oh My Zsh
 
 If you would to request supports of new Linux distributions or software, please [submit an issue](https://github.com/hust-open-atom-club/hustmirror-cli/issues/new/choose).
 
