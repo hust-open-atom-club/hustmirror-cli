@@ -20,7 +20,7 @@ _rustup_get_shell_rc() {
 _rustup_gen_tag="${gen_tag}::rustup"
 
 check() {
-  has_command rustup
+	has_command rustup
 }
 
 is_deployed() {

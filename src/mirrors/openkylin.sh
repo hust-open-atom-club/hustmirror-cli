@@ -4,11 +4,11 @@ check() {
 }
 
 install() {
-    config_file="/etc/apt/sources.list"
-    source_os_release
+	config_file="/etc/apt/sources.list"
+	source_os_release
 
-    codename=${VERSION_CODENAME}
-    set_sudo
+	codename=${VERSION_CODENAME}
+	set_sudo
 
 	$sudo cp ${config_file} ${config_file}.bak || {
 		print_error "Failed to backup ${config_file}"
@@ -26,7 +26,7 @@ EOF
 		return 1
 	}
 
-    confirm_y "Do you want to apt update?" && {
+	confirm_y "Do you want to apt update?" && {
 		$sudo apt update || {
 			print_error "apt update failed"
 			return 1

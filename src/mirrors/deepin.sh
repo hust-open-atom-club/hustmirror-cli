@@ -4,16 +4,16 @@ check() {
 }
 
 install() {
-    config_file="/etc/apt/sources.list"
-    source_os_release
+	config_file="/etc/apt/sources.list"
+	source_os_release
 
-    if [ -z "$VERSION_CODENAME" ]; then
-        print_error "Unsupported Deepin version"
-        return 1
-    fi
+	if [ -z "$VERSION_CODENAME" ]; then
+		print_error "Unsupported Deepin version"
+		return 1
+	fi
 
-    codename=${VERSION_CODENAME}
-    set_sudo
+	codename=${VERSION_CODENAME}
+	set_sudo
 
 	$sudo cp ${config_file} ${config_file}.bak || {
 		print_error "Failed to backup ${config_file}"

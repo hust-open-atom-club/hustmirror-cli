@@ -1,8 +1,8 @@
 interact_recover() {
 	set_mirror_recover_list
 
-    get_input "What do you want to uninstall?
-    <softwares> for specific softwares, use space to separate multiple softwares."
+	get_input "What do you want to uninstall?
+	<softwares> for specific softwares, use space to separate multiple softwares."
 
 	uninstall_things="$input"
 
@@ -31,14 +31,14 @@ interact_main() {
 	while true; do
 		input=""
 		get_input "What do you want to install? [all] 
-    (a)ll for ready, all! (a!) for all software(s), including unsure ones.
-    <softwares> for specific softwares, use space to separate multiple softwares.
-    (l)ist for forcely list all softwares, even is not supported here.
+	(a)ll for ready, all! (a!) for all software(s), including unsure ones.
+	<softwares> for specific softwares, use space to separate multiple softwares.
+	(l)ist for forcely list all softwares, even is not supported here.
     
-    Other options:
-    (r)ecover for uninstall software mirror.
-    (i)nstall or update hust-mirror locally
-    (q)uit for exit."
+	Other options:
+	(r)ecover for uninstall software mirror.
+	(i)nstall or update hust-mirror locally
+	(q)uit for exit."
 
 		# parse input
 		if [ -z "$input" ]; then
