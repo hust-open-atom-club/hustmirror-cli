@@ -46,13 +46,19 @@ install() {
 	print_success "rustup mirror will take effect next time shell start."
 }
 
+can_recover() {
+	_rustup_is_deployed
+}
+
 uninstall() {
 	_rustup_get_shell_rc
 	if [ -z "$_rustup_shell_rc" ]; then
 		print_error "Can not find shell rc file."
 		return 1
 	fi
-	sed -i "/${_rustup_gen_tag}/d" "$_rustup_shell_rc"
+	# do not use -i, because it is not supported by all sed, such as macOS
+	sed "/${_rustup_gen_tag}/d" "$_rustup_shell_rc" > "$_rustup_shell_rc.tmp"
+	mv "$_rustup_shell_rc.tmp" "$_rustup_shell_rc"
 	print_success "rustup mirror has been unset."
 }
 
