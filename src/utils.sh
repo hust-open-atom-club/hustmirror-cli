@@ -11,7 +11,11 @@ print_logo() {
 source_os_release() {
 	# /etc/os-release does exist in most Linux distributions, and BSD variants
 	test -e /etc/os-release && os_release='/etc/os-release' || os_release='/usr/lib/os-release'
-	. "${os_release}"
+	if [ -f "${os_release}" ]; then
+		. "${os_release}"
+	else
+		NAME="Unknown"
+	fi
 }
 
 is_root() {

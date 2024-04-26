@@ -6,8 +6,7 @@ else
 fi
 
 # help text, define _help_(topic) variable
-_help_basic=$(cat <<EOF
-A CLI posix shell script to generate a configuration file for software
+_help_basic="A CLI posix shell script to generate a configuration file for software
 repository on different distributions.
 
 Usage: $program [options...]
@@ -45,11 +44,9 @@ Environments: (optional)
    HM_HTTP                    protoal (http/https), default is http
    HM_DOMAIN                  domain name
 
-EOF
-)
+"
 
-_help_help=$(cat <<EOF
-Get help of a command or a target topic.
+_help_help="Get help of a command or a target topic.
 
 Usage: $program help [command|topic]
        $program h [command|topic] (alias)
@@ -60,10 +57,9 @@ Examples:
 - Get help of a topic
    $program help debian
 
-EOF
-)
+"
 
-_help_deploy=$(cat <<EOF
+_help_deploy="
 Deploy the configuration file.
 
 Usage: $program deploy [targets...]
@@ -73,10 +69,9 @@ Examples:
 - Deploy the configuration file for openeuler and pypi
    $program deploy openeuler pypi
 
-EOF
-)
+"
 
-_help_autodeploy=$(cat <<EOF
+_help_autodeploy="
 Check the system and deploy suggested configuration file.
 
 Usage: $program autodeploy
@@ -85,20 +80,16 @@ Usage: $program autodeploy
 Options: (optional)
    -y                         Answer default option to all questions
 
-EOF
-)
+"
 
-_help_recover=$(cat <<EOF
-Recover the configuration file.
+_help_recover="Recover the configuration file.
 
 Usage: $program recover [targets...]
        $program r [targets...] (alias)
 
-EOF
-)
+"
 
-_help_install=$(cat <<EOF
-Install (Update) this script online to user's local bin.
+_help_install="Install (Update) this script online to user's local bin.
 
 Usage: $program install
        $program i | u | update (alias)
@@ -106,11 +97,9 @@ Usage: $program install
 Note: This command will install the script to ~/.local/bin, and add it to
       PATH in ~/.bashrc or ~/.zshrc.
 
-EOF
-)
+"
 
-_help_autorecover=$(cat <<EOF
-Recover deployed and recoverable configuration file.
+_help_autorecover="Recover deployed and recoverable configuration file.
 
 Usage: $program autorecover
        $program ar (alias)
@@ -119,8 +108,7 @@ Note: This command will only recover the configuration file that can be recovere
       if you don't use this tool to deploy or have deployed some configurations not 
       support to recover, you can't recover it.
 
-EOF
-)
+"
 
 _help_d=${_help_deploy}
 _help_ad=${_help_autodeploy}
@@ -131,23 +119,19 @@ _help_u=${_help_install}
 _help_h=${_help_help}
 _help_update=${_help_install}
 
-
-_help_debian=$(cat <<EOF
-Debian mirror configuration.
+_help_debian="Debian mirror configuration.
 
 Environments:
    DEBIAN_USE_SID            Use unstable instead of testing.
 
-EOF
-)
-
+"
 
 display_help() {
-    echo
+	echo
 
 	if [ -z "$1" ]; then
 		r_echo "$_help_basic"
-        return
+		return
 	fi
 
 	eval help_text=\"\${_help_${1}}\"
