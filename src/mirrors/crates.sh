@@ -20,7 +20,7 @@ install() {
 	mkdir -p "${_crates_cargo_home}"
 
 	if [ -f "${_crates_cargo_home}/config.toml" ] || \
-		[ -f "${_crates_cargo_home}/config"]; then
+		[ -f "${_crates_cargo_home}/config" ]; then
 		confirm "You already have a config.toml file in your cargo home, do you want to continue?" || \
 			return 1
 		if [ -f "${_crates_cargo_home}/config" ]; then
