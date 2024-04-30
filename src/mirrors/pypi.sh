@@ -10,8 +10,8 @@ _pypi_backup_pdm="${_pypi_backup_dir}/pdm.bak"
 _pypi_has_pip=""
 _pypi_has_pdm=""
 
-_pypi_isdeployed_pip=""
-_pypi_isdeployed_pdm=""
+_pypi_isdeployed_pip=0
+_pypi_isdeployed_pdm=0
 
 _pypi_set_python() {
 	if is_windows; then
@@ -31,15 +31,17 @@ check() {
 }
 
 is_deployed() {
-	if [ -n "$_pypi_has_pip" ] &&
-		$_pypi_python -m pip config get global.index-url 2>/dev/null | grep -qE "$domain"; then
-		_pypi_isdeployed_pip=1
+	if [ -n "$_pypi_has_pip" ]; then
+		"$_pypi_python" -m pip config get global.index-url 2>/dev/null | grep -qE "$domain"
+		if [ $? -eq 0 ]; then
+			_pypi_isdeployed_pip=1
+		fi
 	fi
 	if [ -n "$_pypi_has_pdm" ] &&
 		pdm config pypi.url 2>/dev/null | grep -qE "$domain"; then
 		_pypi_isdeployed_pdm=1
 	fi
-	[ -n "$_pypi_isdeployed_pip" ] && [ -n "$_pypi_isdeployed_pdm" ]
+	[ 1 -eq "$_pypi_isdeployed_pip" ] || [ 1 -eq "$_pypi_isdeployed_pdm" ]
 }
 
 can_recover() {
