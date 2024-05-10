@@ -1,0 +1,16 @@
+Source:hustmirror-cli
+Priority: optional
+Section: utils
+Maintainer: xiangzelong <xiangzelong@deepin.org>
+Build-Depends: debhelper-compat (=13)
+Standards-Version: 4.6.2
+Homepage: https://mirrors.hust.edu.cn/
+Vcs-Browser: https://github.com/hust-open-atom-club/hustmirror-cli
+
+Package: hustmirror-cli
+Architecture: all
+Depends: ${misc:Depends}
+Description: CLI posix shell script to replace system repository mirror to HUST Mirror.
+ This script is a Command Line Interface (CLI) POSIX shell script used to replace the system repository mirror with the HUST Mirror.
+ By running this script, users can quickly switch the software source in the system to the HUST-provided mirror source,
+ thereby improving the speed and stability of software downloads.
