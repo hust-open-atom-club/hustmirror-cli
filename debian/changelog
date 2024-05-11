@@ -1,3 +1,9 @@
+hustmirror-cli (1.1.4) unstable; urgency=medium
+
+  * remove hust.college domain by @tttturtle-russ
+
+ -- Dongliang Mu <dzm91@hust.edu.cn>  Sat, 11 May 2024 12:27:23 +0800
+
 hustmirror-cli (1.0.0) unstable; urgency=medium
 
   * new package
