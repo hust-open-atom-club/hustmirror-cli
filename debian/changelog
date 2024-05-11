@@ -1,5 +1,46 @@
-hustmirror-cli (1.0.0) unstable; urgency=medium
+hustmirror-cli (1.1.4) unstable; urgency=medium
 
-  * new package
+  * remove hust.college domain by @tttturtle-russ
 
- -- xiangzelong <xiangzelong@deepin.org>  Thu, 09 May 2024 15:38:23 +0800
+ -- Dongliang Mu <dzm91@hust.edu.cn>  Tue, 7 May 2024 17:36:01 +0800
+
+hustmirror-cli (1.1.3) unstable; urgency=medium
+
+  * add docs about hustmirror-cli usage by @mudongliang
+  * add support for macos by @jxlpzqc
+  * Bug fixes
+    - fix README format by @SophieTwilight
+    - fix coding style by @tttturtle-russ and @jxlpzqc
+    - fix syntax errors in src/mirrors/crates by @jxlpzqc
+    - fix rustup sed -i option by @jxlpzqc
+
+ -- Dongliang Mu <dzm91@hust.edu.cn>  Fri, 26 Apr 2024 18:04:55 +0800
+
+hustmirror-cli (1.1.2) unstable; urgency=medium
+
+  * Bug fixes
+    - missing ubuntu backports
+
+ -- Dongliang Mu <dzm91@hust.edu.cn>  Mon, 25 Mar 2024 15:37:10 +0800
+
+hustmirror-cli (1.1.1) unstable; urgency=medium
+
+  * Add features
+    - linuxmint support
+  * Bug fixes
+    - missing is_windows util function
+
+ -- Dongliang Mu <dzm91@hust.edu.cn>  Sat, 16 Mar 2024 16:55:32 +0800
+
+hustmirror-cli (1.1.0) unstable; urgency=medium
+
+  * Add features
+    - make install target
+    - blackarch support
+    - pypi support
+    - alpine support
+  * Bug fixes
+    - missing '\n' in template-instantiate.py
+    - error name in README.md
+
+ -- Dongliang Mu <dzm91@hust.edu.cn>  Thu, 14 Mar 2024 14:19:13 +0800
