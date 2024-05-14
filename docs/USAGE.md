@@ -1,15 +1,11 @@
 # Usage
 
-The command-line tool [hustmirror-cli](https://gitee.com/dzm91_hust/hustmirror-cli.git)  is a small utility that helps you quickly switch software sources.
+The command-line tool [hustmirror-cli](https://github.com/hust-open-atom-club/hustmirror-cli) is a small utility that helps you quickly switch software sources. Refer to details in our [help documentation at HUST Mirror Site](https://mirrors.hust.edu.cn/docs/).
 
 It has the following features:
 - One-click replacement of software sources
 - Restoration of replaced software sources
 - Online updates
-
-<!-- The supported software/systems are indicated using in the main page list.
-
-You can select your requirements from the hyperlinks below to get started quickly. -->
 
 > [!NOTE]
 > About Bash and POSIX Shell
@@ -67,3 +63,5 @@ For subcommands or specific topics like the `deploy` command, you can use:
 ```sh
 hustmirror-cli help deploy
 ```
+
+[1] [hustmorror-cli help documentation](https://mirrors.hust.edu.cn/docs/)
