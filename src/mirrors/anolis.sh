@@ -8,7 +8,7 @@ check() {
 install() {
 	set_sudo
 
-    for config_file in ${_anolis_config_dir}/*.repo; do
+	for config_file in ${_anolis_config_dir}/*.repo; do
 		[ -f "$config_file" ] || continue
 		$sudo cp ${config_file} ${config_file}.bak || {
 			print_error "Failed to backup ${config_file}"
