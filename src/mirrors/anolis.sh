@@ -1,69 +1,75 @@
-_anolis_config_dir="/etc/yum.repos.d"
+# Auto-generated script for Anolis OS
+# Generated from: anolis.md
+# Mirror ID: anolis-os
 
 check() {
 	source_os_release
 	[ "$NAME" = "Anolis OS" ]
 }
 
-install() {
+_anolis_os_install_1() {
+	# 一键替换Alpine Linux软件源
 	set_sudo
 
-	for config_file in ${_anolis_config_dir}/*.repo; do
-		[ -f "$config_file" ] || continue
-		$sudo cp ${config_file} ${config_file}.bak || {
-			print_error "Failed to backup ${config_file}"
+	if [ -f /etc/yum.repos.d/*.repo ]; then
+		mkdir -p ${_backup_dir} || {
+			print_error "Failed to create backup directory"
 			return 1
 		}
-
-		new_file=$(sed -E "s|https?://([^/]+)|${http}://${domain}|" $config_file)
-		{
-			cat << EOF | $sudo tee ${config_file} > /dev/null
-# ${gen_tag}
-${new_file}
-EOF
-		} || {
-			print_error "Failed to add mirror to ${config_file}"
+		[ -f ${_backup_dir}/anolis-os__etc_yum.repos.d__.repo.bak ] || $sudo cp /etc/yum.repos.d/*.repo ${_backup_dir}/anolis-os__etc_yum.repos.d__.repo.bak || {
+			print_error "Backup /etc/yum.repos.d/*.repo failed"
 			return 1
 		}
-	done
-}
-
-is_deployed() {
-
-	for config_file in ${_anolis_config_dir}/*.repo; do
-		[ -f "$config_file" ] || continue
-		if $sudo grep -q "${gen_tag}" "${config_file}"; then
-			return 0
-		fi
-	done
-
-	return 1
-}
-
-can_recover() {
-
-	for config_file in ${_anolis_config_dir}/*.repo; do
-		[ -f "$config_file" ] || continue
-		if ! test -f "${config_file}.bak"; then
+		$sudo sed -i -E -e "s|https?://(mirrors\\.openanolis\\.cn)|$http://$domain|g" /etc/yum.repos.d/*.repo || {
+			print_error "Failed to update /etc/yum.repos.d/*.repo"
 			return 1
-		fi
-	done
+		}
+	else
+		print_warning "File /etc/yum.repos.d/*.repo does not exist"
+	fi
 
 	return 0
+}
+
+_anolis_os_install_2() {
+	# 更新软件包索引
+	set_sudo
+
+	# Execute commands
+	$sudo yum makecache
+	$sudo yum update
+
+	return 0
+}
+
+install() {
+
+	_anolis_os_install_1 || return 1
+	_anolis_os_install_2 || return 1
+	print_success "Mirror configuration updated successfully"
 }
 
 uninstall() {
-	set_sudo
+	# Recover from backup files and execute recovery commands
+	print_info "Starting recovery process..."
 
-	for config_file in ${_anolis_config_dir}/*.repo; do
-		[ -f "$config_file" ] || continue
-		$sudo mv ${config_file}.bak ${config_file} || {
-			print_error "Failed to recover ${config_file}"
-			return 1
-		}
-	done
+	# Restore files from backup
+	if [ -f ${_backup_dir}/anolis-os__etc_yum.repos.d__.repo.bak ]; then
+		set_sudo
+		cp "${_backup_dir}/anolis-os__etc_yum.repos.d__.repo.bak" /etc/yum.repos.d/*.repo 2>/dev/null || true
+		print_info "Restored /etc/yum.repos.d/*.repo"
+	fi
 
-	return 0
+	print_success "Recovery completed"
 }
 
-# vim: set filetype=sh ts=4 sw=4 noexpandtab:
+can_recover() {
+	# Check if any backup files exist
+	[ -f ${_backup_dir}/anolis-os__etc_yum.repos.d__.repo.bak ]
+}
+
+is_deployed() {
+	# Check if any replaced file contains domain variable
+	[ -f /etc/yum.repos.d/*.repo ] && grep -q "$domain" /etc/yum.repos.d/*.repo 2>/dev/null && return 0
+	return 1
+}

@@ -19,6 +19,8 @@ http="https"
 # npm registry, dockerhub, etc.
 supported_softwares="@var(ls -1 src/mirrors/* | sed -E 's/^.+\/(.+)\.[^.]*$/\1/')"
 
+_backup_dir="${XDG_CONFIG_HOME:-$HOME/.config}/hustmirror/backup"
+
 @mirrors
 
 @include core.sh
