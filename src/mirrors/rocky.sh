@@ -19,13 +19,14 @@ install() {
 		}
 	done
 
-	$sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
-		-e "s|^#baseurl=http://dl.rockylinux.org/\$contentdir|baseurl=${http}://${domain}/rocky|g" \
-		-i \
-		$config_pattern || {
-		print_error "Failed to modify Rocky repos"
-		return 1
-	}
+    $sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+        -e "s|^#*baseurl=https://[^/]*/rocky|baseurl=${http}://${domain}/rocky|g" \
+        -e "s|^#*baseurl=http://dl.rockylinux.org|baseurl=${http}://${domain}/rocky|g" \
+        -i \
+        $config_pattern || {
+        print_error "Failed to modify Rocky repos"
+        return 1
+    }
 
 	for file in $config_pattern; do
 		[ -f "$file" ] || continue
