@@ -21,9 +21,19 @@ install() {
 		return 1
 	}
 
-	secure_url="${http}://${domain}/ubuntu/"
+	if [ "$ARCHITECTURE" = "x86_64" ] || [ "$ARCHITECTURE" = "amd64" ]; then
+		mirror_arch="ubuntu"
+
+		official_secure_url="http://security.ubuntu.com/ubuntu/"
+	else
+		mirror_arch="ubuntu-ports"
+
+		official_secure_url="http://ports.ubuntu.com/ubuntu-ports/"
+	fi
+
+	secure_url="${http}://${domain}/${mirror_arch}/"
 	confirm_y "Use official secure source? (Strongly recommended)" && \
-		secure_url="http://security.ubuntu.com/ubuntu/"
+		secure_url="${official_secure_url}"
 
 	propoesd_prefix="# "
 	confirm "Use proposed source?" && \
@@ -38,13 +48,13 @@ install() {
 		$sudo sh -e -c  "cat <<EOF > ${config_file}
 # ${gen_tag}
 Types: deb
-URIs: ${http}://${domain}/ubuntu/
+URIs: ${http}://${domain}/${mirror_arch}/
 Suites: ${codename} ${codename}-updates ${codename}-backports
 Components: main universe restricted multiverse
 Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 
 ${src_prefix}Types: deb-src
-${src_prefix}URIs: ${http}://${domain}/ubuntu/
+${src_prefix}URIs: ${http}://${domain}/${mirror_arch}/
 ${src_prefix}Suites: ${codename} ${codename}-updates ${codename}-backports
 ${src_prefix}Components: main universe restricted multiverse
 ${src_prefix}Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
@@ -62,13 +72,13 @@ ${src_prefix}Components: main universe restricted multiverse
 ${src_prefix}Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 
 ${propoesd_prefix}Types: deb
-${propoesd_prefix}URIs: ${http}://${domain}/ubuntu/
+${propoesd_prefix}URIs: ${http}://${domain}/${mirror_arch}/
 ${propoesd_prefix}Suites: ${codename}-proposed
 ${propoesd_prefix}Components: main universe restricted multiverse
 ${propoesd_prefix}Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
 
 ${propoesd_prefix}Types: deb-src
-${propoesd_prefix}URIs: ${http}://${domain}/ubuntu/
+${propoesd_prefix}URIs: ${http}://${domain}/${mirror_arch}/
 ${propoesd_prefix}Suites: ${codename}-proposed
 ${propoesd_prefix}Components: main universe restricted multiverse
 ${propoesd_prefix}Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
@@ -76,18 +86,18 @@ EOF"
 	else
 		$sudo sh -e -c  "cat <<EOF > ${config_file}
 # ${gen_tag}
-deb ${http}://${domain}/ubuntu/ ${codename} main restricted universe multiverse
-${src_prefix}deb-src ${http}://${domain}/ubuntu/ ${codename} main restricted universe multiverse
-deb ${http}://${domain}/ubuntu/ ${codename}-updates main restricted universe multiverse
-${src_prefix}deb-src ${http}://${domain}/ubuntu/ ${codename}-updates main restricted universe multiverse
-deb ${http}://${domain}/ubuntu/ ${codename}-backports main restricted universe multiverse
-${src_prefix}deb-src ${http}://${domain}/ubuntu/ ${codename}-backports main restricted universe multiverse
+deb ${http}://${domain}/${mirror_arch}/ ${codename} main restricted universe multiverse
+${src_prefix}deb-src ${http}://${domain}/${mirror_arch}/ ${codename} main restricted universe multiverse
+deb ${http}://${domain}/${mirror_arch}/ ${codename}-updates main restricted universe multiverse
+${src_prefix}deb-src ${http}://${domain}/${mirror_arch}/ ${codename}-updates main restricted universe multiverse
+deb ${http}://${domain}/${mirror_arch}/ ${codename}-backports main restricted universe multiverse
+${src_prefix}deb-src ${http}://${domain}/${mirror_arch}/ ${codename}-backports main restricted universe multiverse
 
 deb ${secure_url} ${codename}-security main restricted universe multiverse
 ${src_prefix}deb-src ${secure_url} ${codename}-security main restricted universe multiverse
 
-${propoesd_prefix}deb ${http}://${domain}/ubuntu/ ${codename}-proposed main restricted universe multiverse
-${propoesd_prefix}deb-src ${http}://${domain}/ubuntu/ ${codename}-proposed main restricted universe multiverse
+${propoesd_prefix}deb ${http}://${domain}/${mirror_arch}/ ${codename}-proposed main restricted universe multiverse
+${propoesd_prefix}deb-src ${http}://${domain}/${mirror_arch}/ ${codename}-proposed main restricted universe multiverse
 EOF"
 	fi
 
