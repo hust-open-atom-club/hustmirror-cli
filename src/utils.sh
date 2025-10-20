@@ -16,6 +16,9 @@ source_os_release() {
 	else
 		NAME="Unknown"
 	fi
+
+	# uname -m to check architecture
+	ARCHITECTURE=$(uname -m)
 }
 
 is_root() {
