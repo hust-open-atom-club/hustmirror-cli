@@ -1,144 +1,153 @@
+# Auto-generated script for Ubuntu
+# Generated from: ubuntu.md
+# Mirror ID: ubuntu
+
 check() {
 	source_os_release
 	[ "$NAME" = "Ubuntu" ]
 }
 
-_ubuntu_set_config_file() {
-	config_file="/etc/apt/sources.list.d/ubuntu.sources"
-	if ! [ -f $config_file ]; then # rule for ubuntu before 24.04
-		config_file="/etc/apt/sources.list"
+_ubuntu_install_1() {
+	# 替换Ubuntu主仓库
+	set_sudo
+
+	if [ -f /etc/apt/sources.list.d/ubuntu.sources ]; then
+		mkdir -p ${_backup_dir} || {
+			print_error "Failed to create backup directory"
+			return 1
+		}
+		[ -f ${_backup_dir}/ubuntu__etc_apt_sources.list.d_ubuntu.sources.bak ] || $sudo cp /etc/apt/sources.list.d/ubuntu.sources ${_backup_dir}/ubuntu__etc_apt_sources.list.d_ubuntu.sources.bak || {
+			print_error "Backup /etc/apt/sources.list.d/ubuntu.sources failed"
+			return 1
+		}
+		$sudo sed -i -E -e "s|^URIs: .*archive.ubuntu.com.*|URIs: $http://$domain/ubuntu/|g" /etc/apt/sources.list.d/ubuntu.sources || {
+			print_error "Failed to update /etc/apt/sources.list.d/ubuntu.sources"
+			return 1
+		}
+	else
+		print_warning "File /etc/apt/sources.list.d/ubuntu.sources does not exist"
 	fi
+
+	if [ -f /etc/apt/sources.list ]; then
+		mkdir -p ${_backup_dir} || {
+			print_error "Failed to create backup directory"
+			return 1
+		}
+		[ -f ${_backup_dir}/ubuntu__etc_apt_sources.list.bak ] || $sudo cp /etc/apt/sources.list ${_backup_dir}/ubuntu__etc_apt_sources.list.bak || {
+			print_error "Backup /etc/apt/sources.list failed"
+			return 1
+		}
+		$sudo sed -i -E -e "s|^deb .*ubuntu.*|deb $http://$domain/ubuntu/|g" /etc/apt/sources.list || {
+			print_error "Failed to update /etc/apt/sources.list"
+			return 1
+		}
+	else
+		print_warning "File /etc/apt/sources.list does not exist"
+	fi
+
+	return 0
+}
+
+_ubuntu_install_2() {
+	# 替换Ubuntu Ports源
+	set_sudo
+
+	if [ -f /etc/apt/sources.list.d/ubuntu.sources ]; then
+		$sudo sed -i -E -e "s|^URIs: .*ports.ubuntu.com.*|URIs: $http://$domain/ubuntu-ports/|g" /etc/apt/sources.list.d/ubuntu.sources || {
+			print_error "Failed to update /etc/apt/sources.list.d/ubuntu.sources"
+			return 1
+		}
+	else
+		print_warning "File /etc/apt/sources.list.d/ubuntu.sources does not exist"
+	fi
+
+	if [ -f /etc/apt/sources.list ]; then
+		$sudo sed -i -E -e "s|^deb .*ports.ubuntu.com.*|deb $http://$domain/ubuntu-ports/|g" /etc/apt/sources.list || {
+			print_error "Failed to update /etc/apt/sources.list"
+			return 1
+		}
+	else
+		print_warning "File /etc/apt/sources.list does not exist"
+	fi
+
+	return 0
+}
+
+_ubuntu_install_3() {
+	# 替换Ubuntu Security源
+	confirm_y "是否 替换Ubuntu Security源?" || return 0
+
+	set_sudo
+
+	if [ -f /etc/apt/sources.list.d/ubuntu.sources ]; then
+		$sudo sed -i -E -e "s|^URIs: .*security.ubuntu.com.*|URIs: $http://$domain/ubuntu/|g" /etc/apt/sources.list.d/ubuntu.sources || {
+			print_error "Failed to update /etc/apt/sources.list.d/ubuntu.sources"
+			return 1
+		}
+	else
+		print_warning "File /etc/apt/sources.list.d/ubuntu.sources does not exist"
+	fi
+
+	if [ -f /etc/apt/sources.list ]; then
+		$sudo sed -i -E -e "s|^deb .*security.ubuntu.com.*|deb $http://$domain/ubuntu/|g" /etc/apt/sources.list || {
+			print_error "Failed to update /etc/apt/sources.list"
+			return 1
+		}
+	else
+		print_warning "File /etc/apt/sources.list does not exist"
+	fi
+
+	return 0
+}
+
+_ubuntu_install_4() {
+	# Update Ubuntu APT sources
+	confirm_y "Update Ubuntu APT sources?" || return 0
+
+	set_sudo
+
+	# Execute commands
+	$sudo apt-get update
+
+	return 0
 }
 
 install() {
-	_ubuntu_set_config_file
-	source_os_release
-	codename=${VERSION_CODENAME}
-	set_sudo
 
-	$sudo cp ${config_file} ${config_file}.bak || {
-		print_error "Backup ${config_file} failed"
-		return 1
-	}
-
-	if [ "$ARCHITECTURE" = "x86_64" ] || [ "$ARCHITECTURE" = "amd64" ]; then
-		mirror_arch="ubuntu"
-
-		official_secure_url="http://security.ubuntu.com/ubuntu/"
-	else
-		mirror_arch="ubuntu-ports"
-
-		official_secure_url="http://ports.ubuntu.com/ubuntu-ports/"
-	fi
-
-	secure_url="${http}://${domain}/${mirror_arch}/"
-	confirm_y "Use official secure source? (Strongly recommended)" && \
-		secure_url="${official_secure_url}"
-
-	propoesd_prefix="# "
-	confirm "Use proposed source?" && \
-		propoesd_prefix=""
-
-	src_prefix="# "
-	confirm "Use source code?" && \
-		src_prefix=""
-
-	# 如果 config_file == /etc/apt/sources.list.d/ubuntu.sources
-	if [ "$config_file" = "/etc/apt/sources.list.d/ubuntu.sources" ]; then
-		$sudo sh -e -c  "cat <<EOF > ${config_file}
-# ${gen_tag}
-Types: deb
-URIs: ${http}://${domain}/${mirror_arch}/
-Suites: ${codename} ${codename}-updates ${codename}-backports
-Components: main universe restricted multiverse
-Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
-
-${src_prefix}Types: deb-src
-${src_prefix}URIs: ${http}://${domain}/${mirror_arch}/
-${src_prefix}Suites: ${codename} ${codename}-updates ${codename}-backports
-${src_prefix}Components: main universe restricted multiverse
-${src_prefix}Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
-
-Types: deb
-URIs: ${secure_url}
-Suites: ${codename}-security
-Components: main universe restricted multiverse
-Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
-
-${src_prefix}Types: deb-src
-${src_prefix}URIs: ${secure_url}
-${src_prefix}Suites: ${codename}-security
-${src_prefix}Components: main universe restricted multiverse
-${src_prefix}Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
-
-${propoesd_prefix}Types: deb
-${propoesd_prefix}URIs: ${http}://${domain}/${mirror_arch}/
-${propoesd_prefix}Suites: ${codename}-proposed
-${propoesd_prefix}Components: main universe restricted multiverse
-${propoesd_prefix}Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
-
-${propoesd_prefix}Types: deb-src
-${propoesd_prefix}URIs: ${http}://${domain}/${mirror_arch}/
-${propoesd_prefix}Suites: ${codename}-proposed
-${propoesd_prefix}Components: main universe restricted multiverse
-${propoesd_prefix}Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
-EOF"
-	else
-		$sudo sh -e -c  "cat <<EOF > ${config_file}
-# ${gen_tag}
-deb ${http}://${domain}/${mirror_arch}/ ${codename} main restricted universe multiverse
-${src_prefix}deb-src ${http}://${domain}/${mirror_arch}/ ${codename} main restricted universe multiverse
-deb ${http}://${domain}/${mirror_arch}/ ${codename}-updates main restricted universe multiverse
-${src_prefix}deb-src ${http}://${domain}/${mirror_arch}/ ${codename}-updates main restricted universe multiverse
-deb ${http}://${domain}/${mirror_arch}/ ${codename}-backports main restricted universe multiverse
-${src_prefix}deb-src ${http}://${domain}/${mirror_arch}/ ${codename}-backports main restricted universe multiverse
-
-deb ${secure_url} ${codename}-security main restricted universe multiverse
-${src_prefix}deb-src ${secure_url} ${codename}-security main restricted universe multiverse
-
-${propoesd_prefix}deb ${http}://${domain}/${mirror_arch}/ ${codename}-proposed main restricted universe multiverse
-${propoesd_prefix}deb-src ${http}://${domain}/${mirror_arch}/ ${codename}-proposed main restricted universe multiverse
-EOF"
-	fi
-
-	if [ $? -ne 0 ]; then
-		print_error "Write ${config_file} failed"
-		return 1
-	fi
-
-	confirm_y "Do you want to apt update?" && {
-		$sudo apt update || {
-			print_error "apt update failed"
-			return 1
-		}
-	}
-
-	true
+	_ubuntu_install_1 || return 1
+	_ubuntu_install_2 || return 1
+	_ubuntu_install_3 || return 1
+	_ubuntu_install_4 || return 1
+	print_success "Mirror configuration updated successfully"
 }
 
 uninstall() {
-	_ubuntu_set_config_file
-	set_sudo
-	$sudo mv ${config_file}.bak ${config_file} || {
-		print_error "Failed to recover ${config_file}"
-		return 1
-	}
-}
+	# Recover from backup files and execute recovery commands
+	print_info "Starting recovery process..."
 
-is_deployed() {
-	_ubuntu_set_config_file
-	result=0
-	$sudo grep -q "${gen_tag}" ${config_file} || result=$?
-	return $result
+	# Restore files from backup
+	if [ -f ${_backup_dir}/ubuntu__etc_apt_sources.list.d_ubuntu.sources.bak ]; then
+		set_sudo
+		cp "${_backup_dir}/ubuntu__etc_apt_sources.list.d_ubuntu.sources.bak" /etc/apt/sources.list.d/ubuntu.sources 2>/dev/null || true
+		print_info "Restored /etc/apt/sources.list.d/ubuntu.sources"
+	fi
+	if [ -f ${_backup_dir}/ubuntu__etc_apt_sources.list.bak ]; then
+		set_sudo
+		cp "${_backup_dir}/ubuntu__etc_apt_sources.list.bak" /etc/apt/sources.list 2>/dev/null || true
+		print_info "Restored /etc/apt/sources.list"
+	fi
+
+	print_success "Recovery completed"
 }
 
 can_recover() {
-	_ubuntu_set_config_file
-	bak_file="$config_file.bak"
-
-	result=0
-	test -f $bak_file || result=$?
-	return $result
+	# Check if any backup files exist
+	[ -f ${_backup_dir}/ubuntu__etc_apt_sources.list.d_ubuntu.sources.bak ] || [ -f ${_backup_dir}/ubuntu__etc_apt_sources.list.bak ]
 }
 
-# vim: set filetype=sh ts=4 sw=4 noexpandtab:
+is_deployed() {
+	# Check if any replaced file contains domain variable
+	[ -f /etc/apt/sources.list.d/ubuntu.sources ] && grep -q "$domain" /etc/apt/sources.list.d/ubuntu.sources 2>/dev/null && return 0
+	[ -f /etc/apt/sources.list ] && grep -q "$domain" /etc/apt/sources.list 2>/dev/null && return 0
+	return 1
+}

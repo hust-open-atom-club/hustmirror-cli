@@ -1,48 +1,84 @@
-_openeuler_config_file="/etc/yum.repos.d/openEuler.repo"
+# Auto-generated script for openEuler
+# Generated from: openeuler.md
+# Mirror ID: openeuler
 
 check() {
 	source_os_release
 	[ "$NAME" = "openEuler" ]
 }
 
-install() {
-	config_file=$_openeuler_config_file
+_openeuler_install_1() {
+	# 替换Linux Mint主仓库
 	set_sudo
 
-	$sudo cp ${config_file} ${config_file}.bak || {
-		print_error "Failed to backup ${config_file}"
-		return 1
-	}
+	if [ -f /etc/yum.repos.d/openEuler.repo ]; then
+		mkdir -p ${_backup_dir} || {
+			print_error "Failed to create backup directory"
+			return 1
+		}
+		[ -f ${_backup_dir}/openeuler__etc_yum.repos.d_openEuler.repo.bak ] || $sudo cp /etc/yum.repos.d/openEuler.repo ${_backup_dir}/openeuler__etc_yum.repos.d_openEuler.repo.bak || {
+			print_error "Backup /etc/yum.repos.d/openEuler.repo failed"
+			return 1
+		}
+		$sudo sed -i -E -e "s|http://repo.openeuler.org|$http://$domain/openeuler|g" /etc/yum.repos.d/openEuler.repo || {
+			print_error "Failed to update /etc/yum.repos.d/openEuler.repo"
+			return 1
+		}
+	else
+		print_warning "File /etc/yum.repos.d/openEuler.repo does not exist"
+	fi
 
-	new_file=$(sed -E "s|https?://([^/]+)|${http}://${domain}/openeuler|" $config_file)
-	{
-		cat << EOF | $sudo tee ${config_file} > /dev/null
-# ${gen_tag}
-${new_file}
-EOF
-	} || {
-		print_error "Failed to add mirror to ${config_file}"
-		return 1
-	}
+	# 目前本镜像站暂不支持 openEuler 的 metalink 功能，因此需要注释相关行
+	if [ -f /etc/yum.repos.d/openEuler.repo ]; then
+		$sudo sed -i -E -e "s|\\(metalink=.*$\\)|# \\1|g" /etc/yum.repos.d/openEuler.repo || {
+			print_error "Failed to update /etc/yum.repos.d/openEuler.repo"
+			return 1
+		}
+	else
+		print_warning "File /etc/yum.repos.d/openEuler.repo does not exist"
+	fi
+
+	return 0
 }
 
-is_deployed() {
-	config_file=$_openeuler_config_file
-	$sudo grep -q "${gen_tag}" ${config_file}
+_openeuler_install_2() {
+	# Execute commands
+	set_sudo
+
+	# Execute commands
+	$sudo dnf update
+
+	return 0
 }
 
-can_recover() {
-	bak_file=${_openeuler_config_file}.bak
-	test -f $bak_file
+install() {
+
+	_openeuler_install_1 || return 1
+	_openeuler_install_2 || return 1
+	print_success "Mirror configuration updated successfully"
 }
 
 uninstall() {
-	config_file=$_openeuler_config_file
-	set_sudo
-	$sudo mv ${config_file}.bak ${config_file} || {
-		print_error "Failed to recover ${config_file}"
-		return 1
-	}
+	# Recover from backup files and execute recovery commands
+	print_info "Starting recovery process..."
+
+	# Restore files from backup
+	if [ -f ${_backup_dir}/openeuler__etc_yum.repos.d_openEuler.repo.bak ]; then
+		set_sudo
+		cp "${_backup_dir}/openeuler__etc_yum.repos.d_openEuler.repo.bak" /etc/yum.repos.d/openEuler.repo 2>/dev/null || true
+		print_info "Restored /etc/yum.repos.d/openEuler.repo"
+	fi
+
+	print_success "Recovery completed"
 }
 
-# vim: set filetype=sh ts=4 sw=4 noexpandtab:
+can_recover() {
+	# Check if any backup files exist
+	[ -f ${_backup_dir}/openeuler__etc_yum.repos.d_openEuler.repo.bak ]
+}
+
+is_deployed() {
+	# Check if any replaced file contains domain variable
+	[ -f /etc/yum.repos.d/openEuler.repo ] && grep -q "$domain" /etc/yum.repos.d/openEuler.repo 2>/dev/null && return 0
+	return 1
+}

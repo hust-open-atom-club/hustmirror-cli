@@ -1,84 +1,89 @@
-_synonyms_python="pypi"
-_synonyms_pip="pypi"
-_synonyms_pdm="pypi"
-
-_pypi_python="python"
-_pypi_backup_dir="${XDG_CONFIG_HOME:-$HOME/.config}/hustmirror/backup"
-_pypi_backup_pip="${_pypi_backup_dir}/pip.bak"
-_pypi_backup_pdm="${_pypi_backup_dir}/pdm.bak"
-
-_pypi_has_pip=""
-_pypi_has_pdm=""
-
-_pypi_isdeployed_pip=""
-_pypi_isdeployed_pdm=""
-
-_pypi_set_python() {
-	if is_windows; then
-		if ! has_command "python"; then
-			_pypi_python=$(reg query HKCU\\Software\\Python //s //f ExecutablePath //e |
-				grep ExecutablePath | head -n 1 | tr -s " " | cut -f 4 -d " ")
-		fi
-	fi
-}
+# Auto-generated script for PyPI
+# Generated from: pypi.md
+# Mirror ID: pypi
 
 check() {
-	_pypi_set_python
-	has_command "$_pypi_python" && "$_pypi_python" -m pip --version >/dev/null 2>&1 && _pypi_has_pip=1
-	has_command "$_pypi_python" && pdm --version >/dev/null 2>&1 && _pypi_has_pdm=1
-
-	[ -n "$_pypi_has_pip" ] || [ -n "$_pypi_has_pdm" ]
+	has_command pip || has_command pdm || has_command uv
 }
 
-is_deployed() {
-	if [ -n "$_pypi_has_pip" ] &&
-		$_pypi_python -m pip config get global.index-url 2>/dev/null | grep -qE "$domain"; then
-		_pypi_isdeployed_pip=1
-	fi
-	if [ -n "$_pypi_has_pdm" ] &&
-		pdm config pypi.url 2>/dev/null | grep -qE "$domain"; then
-		_pypi_isdeployed_pdm=1
-	fi
-	[ -n "$_pypi_isdeployed_pip" ] && [ -n "$_pypi_isdeployed_pdm" ]
+_pypi_install_1() {
+	# Test and execute
+	# Test conditions
+	has_command pip || {
+		print_warning "Test condition failed: has_command pip"
+	}
+
+	# Execute commands
+	pip config get global.index-url 2>/dev/null > ${_backup_dir}/pip.bak
+	pip config set global.index-url "https://$domain/pypi/web/simple/"
+
+	return 0
 }
 
-can_recover() {
-	[ -f "$_pypi_backup_pip" ] || [ -f "$_pypi_backup_pdm" ]
+_pypi_install_2() {
+	# Test and execute
+	backup_path="${_backup_dir}"
+
+	# Test conditions
+	has_command pdm || {
+		print_warning "Test condition failed: has_command pdm"
+	}
+
+	# Execute commands
+	pdm config pypi.url 2>/dev/null > $backup_path/pdm.bak
+	pdm config global.index-url https://$domain/pypi/web/simple/
+
+	return 0
+}
+
+_pypi_install_3() {
+	# Test and execute
+	set_sudo
+
+	backup_path="${_backup_dir}"
+
+	# Test conditions
+	has_command uv || {
+		print_warning "Test condition failed: has_command uv"
+	}
+
+	# Execute commands
+	$sudo mkdir -p /etc/uv
+	if [ ! -f /etc/uv/uv.toml ]; then
+	$sudo touch /etc/uv/uv.toml
+	else
+	$sudo cp /etc/uv/uv.toml $backup_path/uv.bak
+	fi
+	$sudo tee -a /etc/uv/uv.toml > /dev/null << EOF
+[[index]]
+url = "https://$domain"
+default = true
+EOF
+
+	return 0
 }
 
 install() {
-	mkdir -p "$_pypi_backup_dir"
-	if [ -n "$_pypi_has_pip" ]; then
-		$_pypi_python -m pip config get global.index-url 2>/dev/null >"$_pypi_backup_pip"
-		$_pypi_python -m pip config set global.index-url "${http}://${domain}/pypi/web/simple/"
-		print_success "pip mirror has been set."
-	fi
-	if [ -n "$_pypi_has_pdm" ]; then
-		pdm config pypi.url 2>/dev/null >"$_pypi_backup_pdm"
-		pdm config pypi.url "${http}://${domain}/pypi/web/simple/"
-		print_success "pdm mirror has been set."
-	fi
+
+	_pypi_install_1 || return 1
+	_pypi_install_2 || return 1
+	_pypi_install_3 || return 1
+	print_success "Mirror configuration updated successfully"
 }
 
 uninstall() {
-	if [ -n "$_pypi_has_pip" ]; then
-		last_url=$(cat "$_pypi_backup_pip")
-		if [ -z "$last_url" ]; then
-			$_pypi_python -m pip config unset global.index-url
-		else
-			$_pypi_python -m pip config set global.index-url "$last_url"
-		fi
-		print_success "pip mirror has been recovered."
-	fi
-	if [ -n "$_pypi_has_pdm" ]; then
-		last_url=$(cat "$_pypi_backup_pdm")
-		if [ -z "$last_url" ]; then
-			pdm config -d pypi.url
-		else
-			pdm config pypi.url "$last_url"
-		fi
-		print_success "pdm mirror has been recovered."
-	fi
-}
+	# Recover from backup files and execute recovery commands
+	print_info "Starting recovery process..."
 
-# vim: set filetype=sh ts=4 sw=4 noexpandtab:
+
+	# Execute recovery commands
+	last_url=$(cat "$_backup_dir/pip.bak") 2>/dev/null || true
+	pip config set global.index-url "$last_url" 2>/dev/null || true
+	last_url=$(cat "$_backup_dir/pdm.bak") 2>/dev/null || true
+	pdm config pypi.url "$last_url" 2>/dev/null || true
+	set_sudo 2>/dev/null || true
+	$sudo rm /etc/uv/uv.toml 2>/dev/null || true
+	$sudo cp $_backup_dir/uv.bak /etc/uv/uv.toml 2>/dev/null || true
+
+	print_success "Recovery completed"
+}

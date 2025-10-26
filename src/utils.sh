@@ -149,6 +149,9 @@ get_input() {
 confirm() {
 	# call with a prompt string or use a default
 	get_input "${1:-Are you sure?} [y/N]" "n"
+	if [ "$HM_TEST_MODE" = "y" ]; then
+		return 1
+	fi
 	case "${input}" in
 		[yY][eE][sS]|[yY])
 			true
@@ -162,6 +165,9 @@ confirm() {
 confirm_y() {
 	# call with a prompt string or use a default
 	get_input "${1:-Are you sure?} [Y/n]" "y"
+	if [ "$HM_TEST_MODE" = "y" ]; then
+		return 1
+	fi
 	case "${input}" in
 		[nN][oO]|[nN])
 			false

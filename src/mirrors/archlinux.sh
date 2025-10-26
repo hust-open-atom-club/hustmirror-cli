@@ -1,53 +1,74 @@
-_synonyms_arch="archlinux"
-_archlinux_config_file="/etc/pacman.d/mirrorlist"
+# Auto-generated script for Arch Linux
+# Generated from: archlinux.md
+# Mirror ID: arch-linux
 
 check() {
 	source_os_release
 	[ "$NAME" = "Arch Linux" ]
 }
 
-install() {
-	config_file=$_archlinux_config_file
+_arch_linux_install_1() {
+	# 一键替换Alpine Linux软件源
 	set_sudo
 
-	$sudo cp ${config_file} ${config_file}.bak || {
-		print_error "Failed to backup ${config_file}"
-		return 1
-	}
+	if [ -f /etc/pacman.d/mirrorlist ]; then
+		mkdir -p ${_backup_dir} || {
+			print_error "Failed to create backup directory"
+			return 1
+		}
+		[ -f ${_backup_dir}/arch-linux__etc_pacman.d_mirrorlist.bak ] || $sudo cp /etc/pacman.d/mirrorlist ${_backup_dir}/arch-linux__etc_pacman.d_mirrorlist.bak || {
+			print_error "Backup /etc/pacman.d/mirrorlist failed"
+			return 1
+		}
+		$sudo  sed -i -E -e "1i\\Server = ${_http}://${_domain}/archlinux/$repo/os/$arch" /etc/pacman.d/mirrorlist || {
+			print_error "Failed to update /etc/pacman.d/mirrorlist"
+			return 1
+		}
+	else
+		print_warning "File /etc/pacman.d/mirrorlist does not exist"
+	fi
 
-	old_config=$(cat ${config_file})
-	{
-		cat << EOF | $sudo tee ${config_file} > /dev/null
-# ${gen_tag}
-Server = ${http}://${domain}/archlinux/\$repo/os/\$arch
-${old_config}
-EOF
-	} || {
-		print_error "Failed to add mirror to ${config_file}"
-		return 1
-	}
+	return 0
 }
 
-is_deployed() {
-	config_file=$_archlinux_config_file
-	pattern="^[^#]*Server\s*=\s*${http}://${domain}/archlinux/\\\$repo/os/\\\$arch"
-	grep -qE "${pattern}" ${config_file} 
+_arch_linux_install_2() {
+	# 更新软件包索引
+	set_sudo
+
+	# Execute commands
+	$sudo pacman -Syyu
+
+	return 0
 }
 
-can_recover() {
-	bak_file=${_archlinux_config_file}.bak
-	result=0
-	test -f $bak_file || result=$?
-	return $result
+install() {
+
+	_arch_linux_install_1 || return 1
+	_arch_linux_install_2 || return 1
+	print_success "Mirror configuration updated successfully"
 }
 
 uninstall() {
-	config_file=$_archlinux_config_file
-	set_sudo
-	$sudo mv ${config_file}.bak ${config_file} || {
-		print_error "Failed to recover ${config_file}"
-		return 1
-	}
+	# Recover from backup files and execute recovery commands
+	print_info "Starting recovery process..."
+
+	# Restore files from backup
+	if [ -f ${_backup_dir}/arch-linux__etc_pacman.d_mirrorlist.bak ]; then
+		set_sudo
+		cp "${_backup_dir}/arch-linux__etc_pacman.d_mirrorlist.bak" /etc/pacman.d/mirrorlist 2>/dev/null || true
+		print_info "Restored /etc/pacman.d/mirrorlist"
+	fi
+
+	print_success "Recovery completed"
 }
 
-# vim: set filetype=sh ts=4 sw=4 noexpandtab:
+can_recover() {
+	# Check if any backup files exist
+	[ -f ${_backup_dir}/arch-linux__etc_pacman.d_mirrorlist.bak ]
+}
+
+is_deployed() {
+	# Check if any replaced file contains domain variable
+	[ -f /etc/pacman.d/mirrorlist ] && grep -q "$domain" /etc/pacman.d/mirrorlist 2>/dev/null && return 0
+	return 1
+}

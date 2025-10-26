@@ -19,14 +19,14 @@ exec 0<&-
 cat $config_file > origin.txt || true
 
 print_title "1. Running deploy"
-HM_HTTP=http /hustmirror/hustmirror-cli autodeploy
+HM_HTTP=http HM_TEST_MODE=y /hustmirror/hustmirror-cli autodeploy
 cat $new_config_file > new.txt || true
 
 print_title "2. Running updates"
 eval $update_command
 
 print_title "3. Running recover"
-HM_HTTP=http /hustmirror/hustmirror-cli recover $recover_item
+HM_HTTP=http HM_TEST_MODE=y /hustmirror/hustmirror-cli recover $recover_item
 cat $config_file > recover.txt || true
 
 print_title "4. Diff files"
