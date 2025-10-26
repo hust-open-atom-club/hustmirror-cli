@@ -8,14 +8,16 @@ check() {
 
 _crates_io_install_1() {
 	# Execute commands
+	backup_path="${_backup_dir}"
+
 	# Execute commands
 	mkdir -p "${HOME}/.cargo"
 	if [ -f "${HOME}/.cargo/config.toml" ]; then
 	confirm "You already have a config.toml file in your cargo home, do you want to continue?" || \
 	return 1
-	mv "${HOME}/.cargo/config.toml" "${_backup_dir}/cargo.bak"
+	mv "${HOME}/.cargo/config.toml" "$backup_path/cargo.bak"
 	else
-	touch "${_backup_dir}/cargo.bak"
+	touch "$backup_path/cargo.bak"
 	fi
 	version=$(cargo --version 2>/dev/null | cut -f 2 -d " ")
 	if [ -n "$version" ] && \
@@ -25,6 +27,7 @@ _crates_io_install_1() {
 	else
 	_crates_mirror="${http}://${domain}/git/crates.io-index/"
 	fi
+	tee -a "${HOME}/.cargo/config.toml" > /dev/null << EOF
 # ${gen_tag}
 [source.crates-io]
 replace-with = 'hustmirror'
