@@ -11,7 +11,7 @@ _radxaos_install_1() {
 	set_sudo
 
 	# Execute commands
-	$sudo ${SUDO}sed -i "s|https://radxa-repo.github.io|$http://$domain/radxa-deb|g" /etc/apt/sources.list.d/*radxa*.list
+	$sudo sed -i "s|https://radxa-repo.github.io|$http://$domain/radxa-deb|g" /etc/apt/sources.list.d/*radxa*.list
 	$sudo apt-get update
 
 	return 0
@@ -29,8 +29,7 @@ uninstall() {
 
 
 	# Execute recovery commands
-	sudo sed -e "s|h$http://$domain/radxa-deb|https://radxa-repo.github.io|g" \ 2>/dev/null || true
-	-i /etc/apt/sources.list.d/*radxa*.list 2>/dev/null || true
+	sed -i "s|$http://$domain/radxa-deb|https://radxa-repo.github.io|g" /etc/apt/sources.list.d/*radxa*.list 2>/dev/null || true
 	apt-get update 2>/dev/null || true
 
 	print_success "Recovery completed"
