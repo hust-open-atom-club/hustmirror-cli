@@ -21,6 +21,7 @@
 - [x] Rustup
 - [x] Ubuntu
 - [x] Oh My Zsh
+- [x] radxa-deb
 
 If you would to request supports of new Linux distributions or software, please [submit an issue](https://github.com/hust-open-atom-club/hustmirror-cli/issues/new/choose).
 
