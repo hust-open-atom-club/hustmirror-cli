@@ -27,9 +27,9 @@ uninstall() {
 	# Recover from backup files and execute recovery commands
 	print_info "Starting recovery process..."
 
-
+	set_sudo
 	# Execute recovery commands
-	sed -i "s|$http://$domain/radxa-deb|https://radxa-repo.github.io|g" /etc/apt/sources.list.d/*radxa*.list 2>/dev/null || true
+	$sudo sed -i "s|$http://$domain/radxa-deb|https://radxa-repo.github.io|g" /etc/apt/sources.list.d/*radxa*.list 2>/dev/null || true
 	apt-get update 2>/dev/null || true
 
 	print_success "Recovery completed"
