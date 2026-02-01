@@ -17,6 +17,7 @@
 - [x] LinuxMint
 - [x] openEuler
 - [x] openKylin
+- [x] OpenBSD
 - [x] pypi
 - [x] Rustup
 - [x] Ubuntu
