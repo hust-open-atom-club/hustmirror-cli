@@ -30,7 +30,8 @@ uninstall() {
 	set_sudo
 	# Execute recovery commands
 	$sudo sed -i "s|$http://$domain/radxa-deb|https://radxa-repo.github.io|g" /etc/apt/sources.list.d/*radxa*.list 2>/dev/null || true
-	apt-get update 2>/dev/null || true
+	$sudo apt-get update 2>/dev/null || true
 
 	print_success "Recovery completed"
 }
+
