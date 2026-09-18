@@ -1,4 +1,4 @@
-.PHONY: all clean dump test
+.PHONY: all clean dump test test-cli
 .DEFAULT_GOAL := all
 
 SRC_DIR := src
@@ -18,8 +18,11 @@ INSTALL_DIR := $(DPREFIX)/bin/
 all: $(OUT_FILE)
 	@echo "Done, object script is $(OUT_FILE)."
 
-test: $(OUT_FILE)
+test: test-cli
 	@tests/test.sh
+
+test-cli: $(OUT_FILE)
+	@tests/cli.sh
 
 install: $(OUT_FILE)
 	@mkdir -p $(INSTALL_DIR)

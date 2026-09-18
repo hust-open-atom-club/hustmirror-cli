@@ -54,6 +54,7 @@ cli_main() {
 			;;
 		*)
 			print_error "Unknown argument $1, exit."
+			return 1
 			;;
 	esac
 }
