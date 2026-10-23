@@ -16,8 +16,12 @@ run_docker() {
     > $LDIR/docker_output.log 2> $LDIR/docker_output.err || true
 
   if [ -f $LDIR/pass ]; then
-    printf "PASS \n"
-  else
-    printf "\033[0;31m FAIL!!! \033[0m \n"
+    printf "PASS 
+"
+    return 0
   fi
+
+  printf "[0;31m FAIL!!! [0m 
+"
+  return 1
 }

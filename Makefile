@@ -19,6 +19,7 @@ all: $(OUT_FILE)
 	@echo "Done, object script is $(OUT_FILE)."
 
 test: $(OUT_FILE)
+	@tests/test-exit-status.sh
 	@tests/test.sh
 
 install: $(OUT_FILE)
